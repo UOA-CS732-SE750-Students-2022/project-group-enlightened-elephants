@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "nodemon": "^2.0.16"
   }
 }
