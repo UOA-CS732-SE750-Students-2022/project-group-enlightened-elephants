@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -r esm ./src/server.js",
-    "production": "cross-env NODE_ENV=production PORT=8080 node -r esm ./src/server.js"
+    "production": "cross-env NODE_ENV=production PORT=8080 node -r esm ./src/server.js",
+    "init-db": "node -r esm ./src/data/init-db.js"
   },
   "keywords": [],
   "author": "",
