@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined} from '@ant-design/icons'
+import { AuthContext } from '../../comtext/authContext'
+import useGet from '../../hooks/useGet'
+import usePost from '../../hooks/usePost'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 // TODO: Add context
 
 export function LoginModal(props) {
 
-    const {loginModalVisible, setLoginModalVisible, setIsLogin} = props
-    // var [loginModalVisible, setLoginModalVisible] = useState(false)
-    var [successModalVisible, setSuccessVisible] = useState(false)
-    // var [isLogin, setIsLogin] = useState(false)
-    // var [uName, setUName] = useState(null)
+    const {loginModalVisible, setLoginModalVisible} = props
+    const {setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
+    const [successModalVisible, setSuccessModalVisible] = useState(false)
+    const [errMsg, setErrMsg] = useState(null)
+    const [errModalVisible, setErrModalVisible] = useState(false)
+    const [token, setToken] = useLocalStorage('token', null)
+    const [tokenExpirationTime, setTokenExpirationTime] = useLocalStorage('tokenExpirationTime', new Date())
+//   console.log(tokenExpirationTime);
+//   console.log((new Date()).valueOf());
+  if (window.localStorage.getItem('tokenExpirationTime')) {
+    if (Number(window.localStorage.getItem('tokenExpirationTime')) < Number((new Date()).valueOf())) {
+      window.localStorage.setItem('token',JSON.stringify(null))
+      window.localStorage.setItem('tokenExpirationTime',JSON.stringify(null))
+    }
+  }
 
     const [form] = Form.useForm()
 
@@ -21,28 +35,54 @@ export function LoginModal(props) {
     */
     const handleCancel = () => {
         setLoginModalVisible(false)
-        setSuccessVisible(false)
+        setSuccessModalVisible(false)
+        setErrModalVisible(false)
     }
-
-    /* 
-        The event of changing Tabs of Login Modal.
-    */
-    const changeTabs = () => { }
 
     /* The event of finishing the form. */
-    const finishLoginForm = (value) => {
+    // TODO: 在这里写登录请求
+    const login = (value) => {
+
+/*   // 获取私钥：
+        const pem = useGet('/key',{})
+
+        const password = value.password     //密码先加密
+
+        // post请求体：(响应不要把密码一起发来！)
+        const body = {
+            username: value.username,
+            password: {}
+        }
+        // 发送post请求：
+        const {status,data} = usePost('/', body, {})
+        // 处理错误：
+        if (status === 442) {
+            setErrMsg(data.message)
+            setErrModalVisible(true)
+        }else{
+            setUserName(data.user.username)
+            setUserId(data.user._id)
+            setToken(data.token)
+            const newTokenExpirationTime = (new Date).valueOf() + 5 * 24 * 60 * 60 *1000
+            setTokenExpirationTime(newTokenExpirationTime)
+            setSuccessModalVisible(true)
+            setIsLogin(true)
+        }
+*/
+setToken(value.username)
+const newTokenExpirationTime = (new Date()).valueOf() + 10
+setTokenExpirationTime(newTokenExpirationTime)
+setSuccessModalVisible(true)
+setIsLogin(true)
+    }
+
+    // 在这里写注册请求，逻辑同上
+    const register = (value) => {
+        setUserName(value.username)
+        setSuccessModalVisible(true)
         setIsLogin(true)
-        // setUName(value.username)
-        setSuccessVisible(true)
-    }
-    const finishRegisterForm = (value) => {
-        setSuccessVisible(true)
-        // setUName(value.username)
     }
 
-    const logOut = () => {
-
-    }
 
     return (
         <>
@@ -56,7 +96,7 @@ export function LoginModal(props) {
                         Cancel
                     </Button>]}>
                 {/* Tabs component of Antd. */}
-                <Tabs defaultActiveKey="login" onChange={changeTabs}>
+                <Tabs defaultActiveKey="login">
                     <TabPane tab="Login" key="login">
                         {/* 
                             THe Form component of Antd.
@@ -67,7 +107,7 @@ export function LoginModal(props) {
                             initialValues={{
                                 remember: true,
                             }}
-                            onFinish={finishLoginForm}
+                            onFinish={login}
                             form={form}
                         >
                             <Form.Item
@@ -96,10 +136,6 @@ export function LoginModal(props) {
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
-
-                                <a className="login-form-forgot" href="">
-                                    Forgot password
-                                </a>
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">
@@ -115,7 +151,7 @@ export function LoginModal(props) {
                             initialValues={{
                                 remember: true,
                             }}
-                            onFinish={finishRegisterForm}
+                            onFinish={register}
                         >
                             <Form.Item
                                 name="username"
@@ -177,7 +213,18 @@ export function LoginModal(props) {
                         Ok
                     </Button>]
                 }>
-                Hi!
+                Hi {userName}!
+            </Modal>
+            <Modal
+                title="Error"
+                visible={errModalVisible}
+                onCancel={()=>setErrModalVisible(false)}
+                footer={[
+                    <Button key="cancel" onClick={()=>setErrModalVisible(false)}>
+                        Re-login
+                    </Button>]
+                }>
+                Error occur: {errMsg}
             </Modal>
         </ >
     )
