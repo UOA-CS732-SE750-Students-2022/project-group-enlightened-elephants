@@ -4,7 +4,7 @@ import jwt from'jsonwebtoken';
 import NodeRSA from 'node-rsa';
 import fs from'fs';
 
-const SECRET = '1234';
+const SECRET = 'enlightened-elephants';
 
 const router = express.Router();
 router.use(express.json());
@@ -18,11 +18,6 @@ const auth = async (req, res, next) => {
     req.cipherText = password
     next();
 }
-
-// app.get('/api/users', async (req, res) => {
-//     const users = await User.find();
-//     res.send(users)
-// });
 
 router.get('/key', async (req, res) =>{
     const pem = fs.readFileSync('./src/public/private.pem');
@@ -52,7 +47,6 @@ router.post('/login', auth, async (req, res) => {
         username: req.body.username
     })
     const isPasswordValid = () =>{
-        //return req.body.password == user.password;
         return req.cipherText == user.password;
     }
     if (!isPasswordValid) {
