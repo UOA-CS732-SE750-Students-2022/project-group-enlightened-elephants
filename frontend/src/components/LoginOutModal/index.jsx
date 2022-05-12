@@ -16,15 +16,6 @@ export function LoginModal(props) {
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
     const [token, setToken] = useLocalStorage('token', null)
-    const [tokenExpirationTime, setTokenExpirationTime] = useLocalStorage('tokenExpirationTime', new Date())
-//   console.log(tokenExpirationTime);
-//   console.log((new Date()).valueOf());
-  if (window.localStorage.getItem('tokenExpirationTime')) {
-    if (Number(window.localStorage.getItem('tokenExpirationTime')) < Number((new Date()).valueOf())) {
-      window.localStorage.setItem('token',JSON.stringify(null))
-      window.localStorage.setItem('tokenExpirationTime',JSON.stringify(null))
-    }
-  }
 
     const [form] = Form.useForm()
 
@@ -63,17 +54,10 @@ export function LoginModal(props) {
             setUserName(data.user.username)
             setUserId(data.user._id)
             setToken(data.token)
-            const newTokenExpirationTime = (new Date).valueOf() + 5 * 24 * 60 * 60 *1000
-            setTokenExpirationTime(newTokenExpirationTime)
             setSuccessModalVisible(true)
             setIsLogin(true)
         }
 */
-setToken(value.username)
-const newTokenExpirationTime = (new Date()).valueOf() + 10
-setTokenExpirationTime(newTokenExpirationTime)
-setSuccessModalVisible(true)
-setIsLogin(true)
     }
 
     // 在这里写注册请求，逻辑同上
