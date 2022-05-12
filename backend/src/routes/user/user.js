@@ -1,5 +1,5 @@
 import express from'express';
-import {Users} from'./models';
+import {addUser} from'../../data/userDao';
 import jwt from'jsonwebtoken';
 import NodeRSA from 'node-rsa';
 import fs from'fs';
@@ -7,16 +7,15 @@ import fs from'fs';
 const SECRET = '1234';
 
 const router = express.Router();
-app.use(express.json());
+router.use(express.json());
 
 // middleware to decrypt 
 const auth = async (req, res, next) => {
-    const pem = fs.readFileSync('./public.pem');
+    const pem = fs.readFileSync('./src/routes/user/public.pem');
     const key = new NodeRSA(pem);
     const cipherText = key.decryptPublic(req.body.password, 'utf8')
     const password = cipherText.split(' ')[0]
     req.cipherText = password
-    console.log(cipherText)
     next();
 }
 
@@ -26,17 +25,16 @@ const auth = async (req, res, next) => {
 // });
 
 // registration api
-router.post('/api/register', auth, async (req, res) => {
-    const user = await User.create({
+router.post('/register', auth, async (req, res) => {
+    const user = await addUser({
         username: req.body.username,
-        //password: req.body.password
         password: req.cipherText
     })
     res.send(user);
 });
 
 // login api
-router.post('/api/login', auth, async (req, res) => {
+router.post('/login', auth, async (req, res) => {
     const user = await User.findOne({
         username: req.body.username
     })
