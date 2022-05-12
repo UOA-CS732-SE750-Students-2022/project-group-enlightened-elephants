@@ -157,7 +157,8 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-### VisualStudioCode ###
+### VisualStudioCode & WebStorm ###
+.idea
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

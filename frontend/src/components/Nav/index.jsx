@@ -1,222 +1,120 @@
-import React, { useState } from 'react'
-import { Menu, Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
-import { HomeOutlined, UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import * as React from 'react';
+import { styled, alpha } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
-// TODO: Add context
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}));
 
-export default function Nav() {
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
 
-    var [current, setCurrent] = useState('home')
-    var [loginModalVisible, setVisible] = useState(false)
-    var [successModalVisible, setSuccessVisible] = useState(false)
-    var [isLogin, setIsLogin] = useState(false)
-    var [logState, setLogState] = useState('Login|Register')
-    var [uName, setUName] = useState('unkown')
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
 
-    const [form] = Form.useForm()
+export default function PrimarySearchAppBar() {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
-    const { TabPane } = Tabs;
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-    /* 
-      The click event of menu: 
-        1. Highlight the selected item.
-        2. If click Login, pop-up a model.
-    */
-    const handleMenuClick = (e) => {
-        setCurrent(e.key)
-        if (e.key === 'login') {
-            setVisible(true)
-        }
-    }
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
-    /* 
-        The event of closing the Model
-    */
-    const handleCancel = () => {
-        setVisible(false)
-        setSuccessVisible(false)
-    }
-
-    /* 
-        The event of changing Tabs of Login Modal.
-    */
-    const changeTabs = () => { }
-
-    /* The event of finishing the form. */
-    const finishLoginForm = (value) => {
-        setIsLogin(true)
-        setUName(value.username)
-        setLogState(value.username)
-        // console.log(value);
-        setSuccessVisible(true)
-    }
-    const finishRegisterForm = (value) => {
-        setSuccessVisible(true)
-        setUName(value.username)
-    }
-
-    const logOut = () => { 
-        
-     }
+    const menuId = 'primary-search-account-menu';
+    const renderMenu = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+      >
+          <MenuItem onClick={handleMenuClose}>Login</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Register</MenuItem>
+      </Menu>
+    );
 
     return (
-        <div>
-            {/* 
-                The Menu component of Antd.
-                    selectedkeys: The key of highlighted item. 
-            */}
-            <Menu onClick={handleMenuClick} selectedKeys={[current]} mode='horizontal'>
-                {/* Items */}
-                <Menu.Item key='home' icon={<HomeOutlined />}>
-                    <Link to='/home'>Home</Link>
-                </Menu.Item>
-                <Menu.Item key='contect'>
-                    <Link to='/contect'>Contect Us</Link>
-                </Menu.Item>
-                {isLogin ?
-                    <Menu.Item style={{ position: 'absolute', right: '10px' }} key='loginOut' onClick={logOut}>
-                        Log Out
-                    </Menu.Item> :
-                    <Menu.Item style={{ position: 'absolute', right: '10px' }} key='login'>
-                        {logState}
-                    </Menu.Item>
-                }
-            </Menu>
-
-            {/* Modal component: The pop-up box of Antd. */}
-            <Modal
-                title="Login"
-                visible={loginModalVisible}
-                onCancel={handleCancel}
-                footer={[
-                    <Button key="cancel" onClick={handleCancel}>
-                        Cancel
-                    </Button>]}>
-                {/* Tabs component of Antd. */}
-                <Tabs defaultActiveKey="login" onChange={changeTabs}>
-                    <TabPane tab="Login" key="login">
-                        {/* 
-                            THe Form component of Antd.
-                        */}
-                        <Form
-                            name="login"
-                            className="login-form"
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={finishLoginForm}
-                            form={form}
-                        >
-                            <Form.Item
-                                name="username"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Username!',
-                                    },
-                                ]}
-                            >
-                                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-                            </Form.Item>
-                            <Form.Item
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Password!',
-                                    },
-                                ]}
-                            >
-                                <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
-                            </Form.Item>
-                            <Form.Item>
-                                <Form.Item name="remember" valuePropName="checked" noStyle>
-                                    <Checkbox>Remember me</Checkbox>
-                                </Form.Item>
-
-                                <a className="login-form-forgot" href="">
-                                    Forgot password
-                                </a>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button">
-                                    Log in
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </TabPane>
-                    <TabPane tab="Register" key="registr">
-                        <Form
-                            name="registr"
-                            className="login-form"
-                            initialValues={{
-                                remember: true,
-                            }}
-                            onFinish={finishRegisterForm}
-                        >
-                            <Form.Item
-                                name="username"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Username!',
-                                    },
-                                ]}
-                            >
-                                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-                            </Form.Item>
-                            <Form.Item
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Password!',
-                                    },
-                                ]}
-                            >
-                                <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
-                            </Form.Item>
-                            <Form.Item
-                                name="passwordConfirm"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Password again!',
-                                    },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-
-                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                        },
-                                    }),
-                                ]}
-                            >
-                                <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button">
-                                    Register
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </TabPane>
-                </Tabs>
-            </Modal>
-            <Modal
-                title="Login"
-                visible={successModalVisible}
-                onCancel={handleCancel}
-                footer={[
-                    <Button key="cancel" onClick={handleCancel}>
-                        Ok
-                    </Button>]
-                }>
-                Hi {uName}!
-            </Modal>
-        </div >
-    )
+      <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+              <Toolbar>
+                  <div className="App-title">Enlightened Elephants</div>
+                  <Search>
+                      <SearchIconWrapper>
+                          <SearchIcon />
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                      />
+                  </Search>
+                  <Box sx={{ flexGrow: 1 }} />
+                  <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                      <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                      >
+                          <AccountCircle />
+                      </IconButton>
+                  </Box>
+              </Toolbar>
+          </AppBar>
+          {renderMenu}
+      </Box>
+    );
 }

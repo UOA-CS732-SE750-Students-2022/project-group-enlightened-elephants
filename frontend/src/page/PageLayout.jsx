@@ -5,7 +5,7 @@ import Nav from '../components/Nav'
 export default function PageLayout() {
     return (
         <div>
-            <Nav/>
+            <Nav />
             <Outlet />
         </div>
     )
