@@ -2,18 +2,17 @@ import React, { useState } from 'react'
 import { Menu, Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
 import { HomeOutlined, UserOutlined, LockOutlined, LoginOutlined, MailOutlined, LogoutOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import SubMenu from 'antd/lib/menu/SubMenu'
 
 // TODO: Add context
 
-export default function Nav() {
+export function LoginOut() {
 
     var [current, setCurrent] = useState('home')
-    var [loginModalVisible, setLoginModalVisible] = useState(false)
+    var [loginModalVisible, setVisible] = useState(false)
     var [successModalVisible, setSuccessVisible] = useState(false)
     var [isLogin, setIsLogin] = useState(false)
-    // var [logState, setLogState] = useState('Login|Register')
-    var [uName, setUName] = useState(null)
+    var [logState, setLogState] = useState('Login|Register')
+    var [uName, setUName] = useState('unkown')
 
     const [form] = Form.useForm()
 
@@ -27,7 +26,7 @@ export default function Nav() {
     const handleMenuClick = (e) => {
         setCurrent(e.key)
         if (e.key === 'login') {
-            setLoginModalVisible(true)
+            setVisible(true)
         }
     }
 
@@ -35,7 +34,7 @@ export default function Nav() {
         The event of closing the Model
     */
     const handleCancel = () => {
-        setLoginModalVisible(false)
+        setVisible(false)
         setSuccessVisible(false)
     }
 
@@ -48,7 +47,7 @@ export default function Nav() {
     const finishLoginForm = (value) => {
         setIsLogin(true)
         setUName(value.username)
-        // setLogState(value.username)
+        setLogState(value.username)
         // console.log(value);
         setSuccessVisible(true)
     }
@@ -57,45 +56,12 @@ export default function Nav() {
         setUName(value.username)
     }
 
-    const logOut = () => {
-
-    }
+    const logOut = () => { 
+        
+     }
 
     return (
-        <div>
-            {/* 
-                The Menu component of Antd.
-                    selectedkeys: The key of highlighted item. 
-            */}
-            <Menu onClick={handleMenuClick} selectedKeys={[current]} mode='horizontal'>
-                {/* Items */}
-                <Menu.Item key='home' icon={<HomeOutlined />}>
-                    <Link to='/home'>Home</Link>
-                </Menu.Item>
-                <Menu.Item key='contact' icon={<MailOutlined />}>
-                    <Link to='/contact'>Contact Us</Link>
-                </Menu.Item>
-                {isLogin ?
-                    <SubMenu
-                        title={
-                            <span className="submenu-title-wrapper">
-                                {uName}
-                            </span>
-                        }
-                        style={{ position: 'absolute', right: '10px' }}
-                        key='userCenter'
-                        icon={<UserOutlined />}
-                    >
-                        <Menu.ItemGroup title="User Center">
-                            <Menu.Item key="logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                        </Menu.ItemGroup>
-                    </SubMenu> :
-                    <Menu.Item style={{ position: 'absolute', right: '10px' }} key='login' icon={<LoginOutlined />}>
-                        Login|Register
-                    </Menu.Item>
-                }
-            </Menu>
-
+        <>
             {/* Modal component: The pop-up box of Antd. */}
             <Modal
                 title="Login"
@@ -229,6 +195,6 @@ export default function Nav() {
                 }>
                 Hi {uName}!
             </Modal>
-        </div >
+        </>
     )
 }
