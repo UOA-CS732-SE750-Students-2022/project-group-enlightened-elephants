@@ -8,7 +8,7 @@ function loginRequest(username, password){
     // encrypt with 'bcrypt'
     let cipherText = bcrypt.hashSync(password, 10);
     // combine cipher text and timestamp
-    cipherText = cipherText + " " + Date.now();
+    cipherText = cipherText;
     // encrypt again with rsa
     const pem = fs.readFileSync('./public/private.pem');
     const key = new NodeRSA(pem);
