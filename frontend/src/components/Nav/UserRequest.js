@@ -12,8 +12,11 @@ function loginRequest(username, password){
     // encrypt again with rsa
     const pem = fs.readFileSync('./public/private.pem');
 
+    axios.get("/user/key")
+        .then(response => console.log(response.data.message));
+    }
 
-    
+
     const key = new NodeRSA(pem);
     cipherText = key.encryptPrivate(cipherText, 'base64');
     console.log(cipherText);
