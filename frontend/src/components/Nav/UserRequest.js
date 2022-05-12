@@ -11,6 +11,9 @@ function loginRequest(username, password){
     cipherText = cipherText;
     // encrypt again with rsa
     const pem = fs.readFileSync('./public/private.pem');
+
+
+    
     const key = new NodeRSA(pem);
     cipherText = key.encryptPrivate(cipherText, 'base64');
     console.log(cipherText);
