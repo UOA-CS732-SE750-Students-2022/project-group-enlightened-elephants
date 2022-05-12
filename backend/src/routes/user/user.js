@@ -1,5 +1,5 @@
 import express from'express';
-import {addUser, find} from'../../data/userDao';
+import {addUser, find} from'../../data/user-data/userDao';
 import jwt from'jsonwebtoken';
 import NodeRSA from 'node-rsa';
 import fs from'fs';
