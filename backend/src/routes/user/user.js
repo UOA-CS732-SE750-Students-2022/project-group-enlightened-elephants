@@ -1,5 +1,5 @@
 import express from'express';
-import {addUser} from'../../data/userDao';
+import {addUser, find} from'../../data/userDao';
 import jwt from'jsonwebtoken';
 import NodeRSA from 'node-rsa';
 import fs from'fs';
@@ -16,6 +16,7 @@ const auth = async (req, res, next) => {
     const cipherText = key.decryptPublic(req.body.password, 'utf8')
     const password = cipherText.split(' ')[0]
     req.cipherText = password
+    
     next();
 }
 
@@ -32,20 +33,10 @@ router.post('/register', auth, async (req, res) => {
     res.send(user);
 });
 
-// registration api
-router.post('/register', auth, async (req, res) => {
-    const user = await addUser({
-        username: req.body.username,
-        password: req.cipherText
-    })
-    res.send(user);
-});
 
 // login api
 router.post('/login', auth, async (req, res) => {
-    const user = await User.findOne({
-        username: req.body.username
-    })
+    const user = await find(req.body.username)
     const isPasswordValid = () =>{
         return req.cipherText == user.password;
     }
@@ -57,6 +48,7 @@ router.post('/login', auth, async (req, res) => {
     // generate token
     const token = jwt.sign({
         id: String(user._id),
+        timestamp : String(Date.now())
     }, SECRET);
     res.send({
         user,

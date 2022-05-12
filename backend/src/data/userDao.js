@@ -7,4 +7,8 @@ async function addUser(user) {
     })
 }
 
-export  {addUser}
+async function find(username){
+    return await User.findOne({username: username})
+}
+
+export  {addUser, find}
