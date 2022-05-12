@@ -11,7 +11,7 @@ router.use(express.json());
 
 // middleware to decrypt 
 const auth = async (req, res, next) => {
-    const pem = fs.readFileSync('./src/routes/user/public.pem');
+    const pem = fs.readFileSync('./src/public/public.pem');
     const key = new NodeRSA(pem);
     const cipherText = key.decryptPublic(req.body.password, 'utf8')
     const password = cipherText.split(' ')[0]
@@ -23,6 +23,19 @@ const auth = async (req, res, next) => {
 //     const users = await User.find();
 //     res.send(users)
 // });
+
+router.get('/key', async (req, res) =>{
+    const pem = fs.readFileSync('./src/public/private.pem');
+    res.send(pem);
+})
+
+router.post('/register', auth, async (req, res) => {
+    const user = await addUser({
+        username: req.body.username,
+        password: req.cipherText
+    })
+    res.send(user);
+});
 
 // registration api
 router.post('/register', auth, async (req, res) => {
