@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined} from '@ant-design/icons'
+import axios from 'axios'
 import { AuthContext } from '../../comtext/authContext'
 import useGet from '../../hooks/useGet'
 import usePost from '../../hooks/usePost'
@@ -31,20 +32,23 @@ export function LoginModal(props) {
 
     /* The event of finishing the form. */
     // TODO: 在这里写登录请求
-    const login = (value) => {
+    const login = async (value) => {
         // Get public key with pem
-        const pem  = useGet('/user/key')
+        const res  = await axios.get('/user/key')
+        const pem = res.data
         // Encrypt
         const encryptor = new JSEncrypt()
         encryptor.setPublicKey(pem)
         const ciphierText = encryptor.encrypt(value.password)
         // Defien username and password
-        const body = {
+        const userInfo = {
             username : value.username,
             password : ciphierText
         }
+        console.log(userInfo.username);
+        const body = JSON.stringify(userInfo)
         // Login
-        const {status, data} = usePost("/user/login", body)
+        const {status, data} = await axios.post("/user/login", userInfo)
         if (status === 442) {
             setErrMsg(data.message)
             setErrModalVisible(true)
@@ -55,42 +59,16 @@ export function LoginModal(props) {
             setIsLogin(true)
             setSuccessModalVisible(false)
         }
-
-
-/*   // 获取私钥：
-        const pem = useGet('/key',{})
-
-        const password = value.password     //密码先加密
-
-        // post请求体：(响应不要把密码一起发来！)
-        const body = {
-            username: value.username,
-            password: {}
-        }
-        // 发送post请求：
-        const {status,data} = usePost('/', body, {})
-        // 处理错误：
-        if (status === 442) {
-            setErrMsg(data.message)
-            setErrModalVisible(true)
-        }else{
-            setUserName(data.user.username)
-            setUserId(data.user._id)
-            setToken(data.token)
-            setIsLogin(true)
-            setSuccessModalVisible(true)
-        }
-*/
     }
 
     // 在这里写注册请求，逻辑同上
-    const register = (value) => {
+    const register = async (value) => {
         setUserName(value.username)
         setIsLogin(true)
         setSuccessModalVisible(true)
 
         // Get public key with pem
-        const pem  = useGet('/user/key')
+        const pem  = (await axios.get('/user/key')).data
         // Encrypt
         const encryptor = new JSEncrypt()
         encryptor.setPublicKey(pem)
@@ -101,13 +79,14 @@ export function LoginModal(props) {
             password : ciphierText
         }
         // Register
-        const {status, data} = usePost("/user/register", body)
+        const {status, data} = await axios.post("/user/register", body)
+        console.log(data);
         if (status === 442) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }
         else{
-            setSuccessModalVisible(false)
+            setSuccessModalVisible(true)
         }
     }
 

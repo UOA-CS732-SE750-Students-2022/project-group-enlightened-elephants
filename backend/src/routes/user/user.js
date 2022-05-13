@@ -33,7 +33,7 @@ router.post('/register', auth, async (req, res) => {
             username: req.body.username,
             password: password
         })
-        res.send({username : req.body.username});
+        res.send({username : user.username});
     }
     else{
         res.status(400).send({message : "usernams exists"})
