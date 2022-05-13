@@ -5,12 +5,10 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import Popover from '@mui/material/Popover';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import SignIn from '../SignIn';
 import { useLocation } from 'react-router'
 
 const Search = styled('div')(({ theme }) => ({
@@ -39,6 +37,11 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
+const SignInWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(2, 2),
+    width: '300px',
+}));
+
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
@@ -57,36 +60,36 @@ export default function PrimarySearchAppBar() {
     const location = useLocation()
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const isMenuOpen = Boolean(anchorEl);
+    const isSignInOpen = Boolean(anchorEl);
 
-    const handleProfileMenuOpen = (event) => {
+    const handleSignInOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuClose = () => {
+    const handleSignInClose = () => {
         setAnchorEl(null);
     };
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-      >
-          <MenuItem onClick={handleMenuClose}>Login</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Register</MenuItem>
-      </Menu>
+    const signInId = isSignInOpen ? 'primary-search-account-SignIn' : undefined;
+    const renderSignIn = (
+        <Popover
+            id={signInId}
+            open={isSignInOpen}
+            anchorEl={anchorEl}
+            onClose={handleSignInClose}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+        >
+            <SignInWrapper>
+                <SignIn/>
+            </SignInWrapper>
+        </Popover>
     );
 
     return (
@@ -110,21 +113,22 @@ export default function PrimarySearchAppBar() {
                   </Search>}
                   <Box sx={{ flexGrow: 1 }} />
                   <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                      <IconButton
+                      <Button
+                        variant="outlined"
                         size="large"
                         edge="end"
                         aria-label="account of current user"
-                        aria-controls={menuId}
+                        aria-controls={signInId}
                         aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
+                        onClick={handleSignInOpen}
                         color="inherit"
                       >
-                          <AccountCircle />
-                      </IconButton>
+                          Sign in
+                      </Button>
                   </Box>
               </Toolbar>
           </AppBar>
-          {renderMenu}
+          {renderSignIn}
       </Box>
     );
 }

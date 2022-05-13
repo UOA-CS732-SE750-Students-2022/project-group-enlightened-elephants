@@ -8,10 +8,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<PageLayout />}>
+        <Route path='/' element={<PageLayout/>}>
           <Route index element={<Navigate to="home" replace />} />
-          <Route path='home' element={<Home />} />
-          <Route path='result' element={<Result />}></Route>
+          <Route path='home' element={<Home/>} />
+          <Route path='result' element={<Result/>} />
         </Route>
       </Routes>
     </BrowserRouter>
