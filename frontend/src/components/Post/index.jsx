@@ -6,25 +6,59 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Popover from '@mui/material/Popover';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import { Link } from "@mui/material";
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
+    fontSize: '18px',
 }));
 
 const ReplyWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(1, 1),
+    padding: theme.spacing(1),
+}));
+
+const CommentsWrapper = styled('div')(({ theme }) => ({
+    margin: theme.spacing(0, 2, 1, 2),
+    padding: theme.spacing(1),
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    display: 'flex',
+    justifyContent: 'space-between',
+}));
+
+const DateWrapper = styled('div')(({ theme }) => ({
+    fontSize: '16px',
+    lineHeight: '24px',
+    padding: '4px',
 }));
 
 export default function Post(props) {
     const {
-        user = 'someone',
+        user_name = 'someone',
         content = 'bala bala',
+        comments = [
+            {
+                user_name: 'commenter-name',
+                to_user_name: 'someone',
+                content: 'bala la',
+            },
+        ],
     } = props;
 
+    const [value, setValue] = React.useState('');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const [fold, setFold] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isReplyOpen = Boolean(anchorEl);
+
+    const handleFold = () => {
+        setFold(!fold);
+    }
 
     const handleReplyOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -32,6 +66,7 @@ export default function Post(props) {
 
     const handleReplyClose = () => {
         setAnchorEl(null);
+        setValue('');
     };
 
     const handleSubmit = (event) => {
@@ -60,21 +95,27 @@ export default function Post(props) {
         >
             <ReplyWrapper>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextareaAutosize
-                        name="content"
-                        aria-label="minimum height"
-                        minRows={5}
-                        placeholder="Please type here..."
-                        style={{ width: 200 }}
-                    />
-                    <Button
-                        size="small"
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Submit
-                    </Button>
+                    <ReplyWrapper>
+                        <TextField
+                            label="Content"
+                            name="content"
+                            multiline
+                            minRows={4}
+                            value={value}
+                            onChange={handleChange}
+                            placeholder="Please type here.."
+                            style={{ width: '100vh' }}
+                        />
+                    </ReplyWrapper>
+                    <ReplyWrapper style={{ paddingTop: '0', textAlign: 'right' }}>
+                        <Button
+                            size="small"
+                            type="submit"
+                            variant="contained"
+                        >
+                            Submit
+                        </Button>
+                    </ReplyWrapper>
                 </Box>
             </ReplyWrapper>
         </Popover>
@@ -85,26 +126,71 @@ export default function Post(props) {
             <Card
                 sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
             >
-                <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {user}<span style={{ fontWeight: '400' }}> says:</span>
+                <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
+                    <Typography gutterBottom component="div">
+                        <Link>{user_name}</Link>
+                        <span style={{ fontSize: '16px' }}> says:</span>
                     </Typography>
-                    <Typography>
+                    <Typography style={{ fontSize: '16px' }}>
                         {content}
                     </Typography>
+                    <CardActions style={{ flexDirection: 'row-reverse', alignItems: 'baseline' }}>
+                        <Button
+                            size="small"
+                            aria-label="account of current user"
+                            aria-controls={replyId}
+                            aria-haspopup="true"
+                            onClick={handleReplyOpen}
+                        >
+                            Reply
+                        </Button>
+                        <DateWrapper>22:22:22 22/05/2022</DateWrapper>
+                    </CardActions>
                 </CardContent>
-                <CardActions>
-                    <span>at 22:22:22 22/05/2022</span>
+                {comments.length > 0 && <CommentsWrapper>
+                    <div style={{ lineHeight: '26px', padding: '4px' }}>
+                        <b>Comments:</b>
+                    </div>
                     <Button
                         size="small"
-                        aria-label="account of current user"
-                        aria-controls={replyId}
-                        aria-haspopup="true"
-                        onClick={handleReplyOpen}
+                        onClick={handleFold}
                     >
-                        Reply
+                        {fold ? 'Unfold' : 'fold'}
                     </Button>
-                </CardActions>
+                </CommentsWrapper>}
+                <CommentsWrapper
+                    style={{
+                        display: fold ? 'none' : 'block',
+                        paddingTop: 0,
+                    }}
+                >
+                    {comments.map((item, index) => (
+                        <div key={index}>
+                            <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
+                                <Typography gutterBottom component="div" style={{ fontSize: '16px' }}>
+                                    <Link>{item.user_name}</Link>
+                                    <span> replied </span>
+                                    <Link>{item.to_user_name}</Link>:
+                                </Typography>
+                                <Typography style={{ fontSize: '16px' }}>
+                                    {item.content}
+                                </Typography>
+                            </CardContent>
+                            <CardActions style={{ flexDirection: 'row-reverse', alignItems: 'baseline' }}>
+                                <Button
+                                    size="small"
+                                    aria-label="account of current user"
+                                    aria-controls={replyId}
+                                    aria-haspopup="true"
+                                    onClick={handleReplyOpen}
+                                >
+                                    Reply
+                                </Button>
+                                <DateWrapper>22:22:22 22/05/2022</DateWrapper>
+                            </CardActions>
+                        </div>
+                    ))}
+                </CommentsWrapper>
             </Card>
             {renderReply}
         </Wrapper>

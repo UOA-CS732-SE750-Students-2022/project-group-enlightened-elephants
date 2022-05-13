@@ -2,11 +2,17 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Box from '@mui/material/Box';
+import CardContent from '@mui/material/CardContent';
+import TextField from "@mui/material/TextField";
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
+}));
+
+const RightButtonWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(1, 0, 2, 1),
+    textAlign: 'right',
 }));
 
 export default function Editor() {
@@ -24,24 +30,28 @@ export default function Editor() {
             <Card
                 sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
             >
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextareaAutosize
-                        name="content"
-                        aria-label="minimum height"
-                        minRows={5}
-                        maxRows={5}
-                        placeholder="Please type here..."
-                        style={{ width: 200 }}
-                    />
-                    <Button
-                        size="small"
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Submit
-                    </Button>
-                </Box>
+                <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            label="Content"
+                            name="content"
+                            multiline
+                            minRows={5}
+                            placeholder="Please type here.."
+                            style={{ width: '100%' }}
+                        />
+                        <RightButtonWrapper>
+                            <Button
+                                size="small"
+                                type="submit"
+                                variant="contained"
+                            >
+                                Add a new post
+                            </Button>
+                        </RightButtonWrapper>
+                    </Box>
+                </CardContent>
+
             </Card>
         </Wrapper>
     );
