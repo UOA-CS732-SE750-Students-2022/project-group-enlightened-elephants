@@ -86,7 +86,11 @@ export function LoginModal(props) {
             setErrModalVisible(true)
         }
         else{
-            setSuccessModalVisible(true)
+            setUserName(data.user.username)
+            setUserId(data.user._id)
+            setToken(data.token)
+            setIsLogin(true)
+            setSuccessModalVisible(false)
         }
     }
 
