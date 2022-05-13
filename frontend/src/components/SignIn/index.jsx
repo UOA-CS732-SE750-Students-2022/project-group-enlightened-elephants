@@ -18,8 +18,9 @@ export default function SignIn() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            email: data.get('email'),
+            userName: data.get('userName'),
             password: data.get('password'),
+            confirmPassword: data.get('confirmPassword'),
         });
     };
 

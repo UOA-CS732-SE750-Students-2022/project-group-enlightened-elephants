@@ -1,25 +1,18 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+import Post from '../components/Post';
+import Editor from '../components/Editor';
 
 export default function BasicStack() {
   return (
     <Box style={{ width: '50%' }}>
       <Stack spacing={2}>
-        <Item>Item 1</Item>
-        <Item>Item 2</Item>
-        <Item>Item 3</Item>
+        <Post/>
+        <Post/>
+        <Post/>
       </Stack>
+      <Editor/>
     </Box>
   );
 }
