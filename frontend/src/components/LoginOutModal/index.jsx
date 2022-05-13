@@ -6,8 +6,6 @@ import useGet from '../../hooks/useGet'
 import usePost from '../../hooks/usePost'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
-// TODO: Add context
-
 export function LoginModal(props) {
 
     const {loginModalVisible, setLoginModalVisible} = props
