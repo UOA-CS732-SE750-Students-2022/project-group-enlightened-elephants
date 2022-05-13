@@ -10,8 +10,9 @@
 .App-title {
   text-align: center;
   font-family:  'Rochester', cursive;
-  font-size: 34px;
+  font-size: 26px;
   color: #fff;
+  text-transform: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

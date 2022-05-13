@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
@@ -9,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useLocation } from 'react-router'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -51,6 +54,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+    const location = useLocation()
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -88,16 +93,21 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
               <Toolbar>
-                  <div className="App-title">Enlightened Elephants</div>
-                  <Search>
+                  <Link to={{ pathname: '/home' }}>
+                      <Button variant="text">
+                          <span className="App-title">Enlightened Elephants</span>
+                      </Button>
+                  </Link>
+
+                  {location.pathname === '/result' && <Search>
                       <SearchIconWrapper>
-                          <SearchIcon />
+                          <SearchIcon/>
                       </SearchIconWrapper>
                       <StyledInputBase
                         placeholder="Search…"
-                        inputProps={{ 'aria-label': 'search' }}
+                        inputProps={{'aria-label': 'search'}}
                       />
-                  </Search>
+                  </Search>}
                   <Box sx={{ flexGrow: 1 }} />
                   <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                       <IconButton

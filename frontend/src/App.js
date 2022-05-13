@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import PageLayout from './page/PageLayout';
-import Contect from './page/Contect';
+import Result from './page/Result';
 import Home from './page/Home'
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         <Route path='/' element={<PageLayout />}>
           <Route index element={<Navigate to="home" replace />} />
           <Route path='home' element={<Home />} />
-          <Route path='contect' element={<Contect />}></Route>
+          <Route path='result' element={<Result />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
