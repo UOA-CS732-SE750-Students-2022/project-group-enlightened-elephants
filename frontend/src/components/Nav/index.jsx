@@ -3,8 +3,9 @@ import { Menu, Modal, Button } from 'antd'
 import { HomeOutlined, UserOutlined, LoginOutlined, MailOutlined, LogoutOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import SubMenu from 'antd/lib/menu/SubMenu'
-import { LoginModal } from '../LoginOutModal'
+import { LoginModal } from '../LoginModal'
 import { AuthContext } from '../../comtext/authContext'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Nav() {
 
@@ -12,6 +13,7 @@ export default function Nav() {
     var [loginModalVisible, setLoginModalVisible] = useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const { isLogin, setIsLogin, userName, setUserName, userId, setUserId } = useContext(AuthContext)
+    const [token, setToken] = useLocalStorage('token')
 
     /* 
       The click event of menu: 
@@ -33,6 +35,7 @@ export default function Nav() {
         setIsLogin(false)
         setUserName(null)
         setUserId(null)
+        setToken(null)
         setLogoutModalVisible(false)
     }
 

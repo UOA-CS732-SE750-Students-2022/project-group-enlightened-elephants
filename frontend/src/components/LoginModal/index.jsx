@@ -1,101 +1,100 @@
-import React, { useState } from 'react'
-import { Menu, Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
-import { HomeOutlined, UserOutlined, LockOutlined, LoginOutlined, MailOutlined, LogoutOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
-import SubMenu from 'antd/lib/menu/SubMenu'
+import React, { useContext, useState } from 'react'
+import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
+import { UserOutlined, LockOutlined} from '@ant-design/icons'
+import axios from 'axios'
+import { AuthContext } from '../../comtext/authContext'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import JSEncrypt from 'jsencrypt/bin/jsencrypt';
 
-// TODO: Add context
+export function LoginModal(props) {
 
-export default function Nav() {
-
-    var [current, setCurrent] = useState('home')
-    var [loginModalVisible, setLoginModalVisible] = useState(false)
-    var [successModalVisible, setSuccessVisible] = useState(false)
-    var [isLogin, setIsLogin] = useState(false)
-    // var [logState, setLogState] = useState('Login|Register')
-    var [uName, setUName] = useState(null)
+    const {loginModalVisible, setLoginModalVisible} = props
+    const {setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
+    const [successModalVisible, setSuccessModalVisible] = useState(false)
+    const [errMsg, setErrMsg] = useState(null)
+    const [errModalVisible, setErrModalVisible] = useState(false)
+    const [token, setToken] = useLocalStorage('token', null)
 
     const [form] = Form.useForm()
 
     const { TabPane } = Tabs;
 
     /* 
-      The click event of menu: 
-        1. Highlight the selected item.
-        2. If click Login, pop-up a model.
-    */
-    const handleMenuClick = (e) => {
-        setCurrent(e.key)
-        if (e.key === 'login') {
-            setLoginModalVisible(true)
-        }
-    }
-
-    /* 
         The event of closing the Model
     */
     const handleCancel = () => {
         setLoginModalVisible(false)
-        setSuccessVisible(false)
+        setSuccessModalVisible(false)
+        setErrModalVisible(false)
     }
-
-    /* 
-        The event of changing Tabs of Login Modal.
-    */
-    const changeTabs = () => { }
 
     /* The event of finishing the form. */
-    const finishLoginForm = (value) => {
+    // TODO: 在这里写登录请求
+    const login = async (value) => {
+        // Get public key with pem
+        const res  = await axios.get('/user/key')
+        const pem = res.data
+        // Encrypt
+        const encryptor = new JSEncrypt()
+        encryptor.setPublicKey(pem)
+        const ciphierText = encryptor.encrypt(value.password)
+        // Defien username and password
+        const userInfo = {
+            username : value.username,
+            password : ciphierText
+        }
+        console.log(userInfo.username);
+        const body = JSON.stringify(userInfo)
+        // Login
+        const {status, data} = await axios.post("/user/login", userInfo)
+        if (status === 442) {
+            setErrMsg(data.message)
+            setErrModalVisible(true)
+        }else{
+            setUserName(data.user.username)
+            setUserId(data.user._id)
+            setToken(data.token)
+            setIsLogin(true)
+            setSuccessModalVisible(false)
+        }
+    }
+
+    // 在这里写注册请求，逻辑同上
+    const register = async (value) => {
+        setUserName(value.username)
         setIsLogin(true)
-        setUName(value.username)
-        // setLogState(value.username)
-        // console.log(value);
-        setSuccessVisible(true)
-    }
-    const finishRegisterForm = (value) => {
-        setSuccessVisible(true)
-        setUName(value.username)
+        setSuccessModalVisible(true)
+
+        // Get public key with pem
+        const pem  = (await axios.get('/user/key')).data
+        // Encrypt
+        const encryptor = new JSEncrypt()
+        encryptor.setPublicKey(pem)
+        const ciphierText = encryptor.encrypt(value.password)
+        // Defien username and password
+        const body = {
+            username : value.username,
+            password : ciphierText
+        }
+        // Register
+        const {status, data} = await axios.post("/user/register", body)
+        console.log(data);
+        if (status === 442) {
+            setErrMsg(data.message)
+            setErrModalVisible(true)
+        }
+        else{
+            setUserName(data.user.username)
+            setUserId(data.user._id)
+            setToken(data.token)
+            setIsLogin(true)
+            setSuccessModalVisible(false)
+        }
     }
 
-    const logOut = () => {
-
-    }
 
     return (
-        <div>
-            {/* 
-                The Menu component of Antd.
-                    selectedkeys: The key of highlighted item. 
-            */}
-            <Menu onClick={handleMenuClick} selectedKeys={[current]} mode='horizontal'>
-                {/* Items */}
-                <Menu.Item key='home' icon={<HomeOutlined />}>
-                    <Link to='/home'>Home</Link>
-                </Menu.Item>
-                <Menu.Item key='contact' icon={<MailOutlined />}>
-                    <Link to='/contact'>Contact Us</Link>
-                </Menu.Item>
-                {isLogin ?
-                    <SubMenu
-                        title={
-                            <span className="submenu-title-wrapper">
-                                {uName}
-                            </span>
-                        }
-                        style={{ position: 'absolute', right: '10px' }}
-                        key='userCenter'
-                        icon={<UserOutlined />}
-                    >
-                        <Menu.ItemGroup title="User Center">
-                            <Menu.Item key="logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                        </Menu.ItemGroup>
-                    </SubMenu> :
-                    <Menu.Item style={{ position: 'absolute', right: '10px' }} key='login' icon={<LoginOutlined />}>
-                        Login|Register
-                    </Menu.Item>
-                }
-            </Menu>
-
+        <>
             {/* Modal component: The pop-up box of Antd. */}
             <Modal
                 title="Login"
@@ -106,7 +105,7 @@ export default function Nav() {
                         Cancel
                     </Button>]}>
                 {/* Tabs component of Antd. */}
-                <Tabs defaultActiveKey="login" onChange={changeTabs}>
+                <Tabs defaultActiveKey="login">
                     <TabPane tab="Login" key="login">
                         {/* 
                             THe Form component of Antd.
@@ -117,7 +116,7 @@ export default function Nav() {
                             initialValues={{
                                 remember: true,
                             }}
-                            onFinish={finishLoginForm}
+                            onFinish={login}
                             form={form}
                         >
                             <Form.Item
@@ -146,10 +145,6 @@ export default function Nav() {
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
-
-                                <a className="login-form-forgot" href="">
-                                    Forgot password
-                                </a>
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">
@@ -165,7 +160,7 @@ export default function Nav() {
                             initialValues={{
                                 remember: true,
                             }}
-                            onFinish={finishRegisterForm}
+                            onFinish={register}
                         >
                             <Form.Item
                                 name="username"
@@ -227,8 +222,19 @@ export default function Nav() {
                         Ok
                     </Button>]
                 }>
-                Hi {uName}!
+                Hi {userName}!
             </Modal>
-        </div >
+            <Modal
+                title="Error"
+                visible={errModalVisible}
+                onCancel={()=>setErrModalVisible(false)}
+                footer={[
+                    <Button key="cancel" onClick={()=>setErrModalVisible(false)}>
+                        Re-login
+                    </Button>]
+                }>
+                Error occur: {errMsg}
+            </Modal>
+        </ >
     )
 }
