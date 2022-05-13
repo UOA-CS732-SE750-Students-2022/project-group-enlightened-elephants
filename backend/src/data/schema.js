@@ -36,7 +36,13 @@ const commentSchema = new Schema({
     timestamps : true
 })
 
+const userSchema = new Schema({
+    username: { type: String, unique: true},
+    password: { type: String },
+})
+
 const Eepost = mongoose.model('Eepost', eepostSchema)
 const Comment = mongoose.model('Comment', commentSchema)
+const User = mongoose.model('User', userSchema)
 
-export {Eepost,Comment}
+export {Eepost,Comment,User}
