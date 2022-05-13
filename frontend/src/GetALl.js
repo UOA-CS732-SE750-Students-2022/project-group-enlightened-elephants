@@ -9,7 +9,7 @@ export default function GetAll() {
     //         alert(data)
     //     })
     const {status,data,isLoding} = useGet('/eepost/getAll', []);
-
+    
 
     return (  
         <div >
