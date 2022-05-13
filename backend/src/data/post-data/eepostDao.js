@@ -32,27 +32,6 @@ async function like(id) {
     return await Eepost.findByIdAndUpdate(id, {$inc : {like : 1}})
 }
 
-// Add a new post
-async function addEepost(eepost) {
-    const dbEepost = new Eepost(eepost)
-    return await dbEepost.save()
-}
-
-// Delete a post by id
-async function deleteEepost(id) {
-    return await Eepost.deleteOne({_id : id})
-}
-
-// Fix the content of a post
-async function updateEepost(id, content) {
-    return await Eepost.findByIdAndUpdate(id, {$set : {content : content}})
-}
-
-// Add a like to a post
-async function like(id) {
-    return await Eepost.findByIdAndUpdate(id, {$inc : {like : 1}})
-}
-
 export {
     retrieveAllEepostList,
     addEepost,
