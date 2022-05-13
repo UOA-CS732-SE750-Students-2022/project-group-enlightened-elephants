@@ -6,12 +6,30 @@ async function retrieveAllEepostList() {
 
 //  paging query
 async function retrieveEepostListByEntryId(entry_id,pageNum) {
-    if (pageNum === 1) {
         const count = await Eepost.find({entry_id : entry_id}).count()
-        const eeposts = await Eepost.find({entry_id : entry_id}).sort({createdAt:-1}).limit(10).populate('comments')
+        const eeposts = await Eepost.find({entry_id : entry_id}).sort({createdAt:-1}).skip(10*(pageNum-1)).limit(10).populate('comments')
         return {count,eeposts}
-    }
-    return await Eepost.find({entry_id : entry_id}).sort({createdAt:-1}).skip(10*(pageNum-1)).limit(10).populate('comments')
+}
+
+// Add a new post
+async function addEepost(eepost) {
+    const dbEepost = new Eepost(eepost)
+    return await dbEepost.save()
+}
+
+// Delete a post by id
+async function deleteEepost(id) {
+    return await Eepost.deleteOne({_id : id})
+}
+
+// Fix the content of a post
+async function updateEepost(id, content) {
+    return await Eepost.findByIdAndUpdate(id, {$set : {content : content}})
+}
+
+// Add a like to a post
+async function like(id) {
+    return await Eepost.findByIdAndUpdate(id, {$inc : {like : 1}})
 }
 
 // Add a new post
