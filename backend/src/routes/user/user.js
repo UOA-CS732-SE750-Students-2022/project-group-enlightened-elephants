@@ -33,10 +33,14 @@ router.post('/register', auth, async (req, res) => {
             username: req.body.username,
             password: password
         })
-        res.send({username : user.username});
+        const token = jwt.sign({
+            id: String(user._id),
+            timestamp : String(Date.now())
+        }, SECRET);
+        res.send({user :{username : user.username}, token});
     }
     else{
-        res.status(400).send({message : "usernams exists"})
+        res.status(422).send({message : "usernams exists"})
     }
 });
 
@@ -52,10 +56,9 @@ router.post('/login', auth, async (req, res) => {
         if(result){
             const token = jwt.sign({
                 id: String(user._id),
-                name: username,
                 timestamp : String(Date.now())
             }, SECRET);
-            return res.send({token});
+            return res.send({user :{username : req.body.username}, token});
         }
         else{
             return res.status(422).send({

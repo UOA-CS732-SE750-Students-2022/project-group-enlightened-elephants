@@ -48,7 +48,10 @@ export function LoginModal(props) {
         console.log(userInfo.username);
         const body = JSON.stringify(userInfo)
         // Login
-        const {status, data} = await axios.post("/user/login", userInfo)
+        const {status, data} = await axios.post("/user/login", userInfo).catch((error) => {
+            setErrMsg(error.response.data.message)
+            setErrModalVisible(true)
+        })
         if (status === 442) {
             setErrMsg(data.message)
             setErrModalVisible(true)
@@ -57,7 +60,7 @@ export function LoginModal(props) {
             setUserId(data.user._id)
             setToken(data.token)
             setIsLogin(true)
-            setSuccessModalVisible(false)
+            setSuccessModalVisible(true)
         }
     }
 
@@ -79,8 +82,11 @@ export function LoginModal(props) {
             password : ciphierText
         }
         // Register
-        const {status, data} = await axios.post("/user/register", body)
-        console.log(data);
+        const {status, data} = await axios.post("/user/register", body).catch((error) => {
+            console.log(error)
+            setErrMsg(error.response.data.message)
+            setErrModalVisible(true)
+        })
         if (status === 442) {
             setErrMsg(data.message)
             setErrModalVisible(true)
