@@ -54,8 +54,8 @@ export function LoginModal(props) {
             setUserName(data.user.username)
             setUserId(data.user._id)
             setToken(data.token)
-            setSuccessModalVisible(true)
             setIsLogin(true)
+            setSuccessModalVisible(true)
         }
 */
     }
@@ -63,8 +63,8 @@ export function LoginModal(props) {
     // 在这里写注册请求，逻辑同上
     const register = (value) => {
         setUserName(value.username)
-        setSuccessModalVisible(true)
         setIsLogin(true)
+        setSuccessModalVisible(true)
     }
 
 
