@@ -55,7 +55,7 @@ router.post('/login', auth, async (req, res) => {
                 name: username,
                 timestamp : String(Date.now())
             }, SECRET);
-            return res.send({token});
+            return res.send({user :{username : user.username, _id : user._id}, token});
         }
         else{
             return res.status(422).send({
