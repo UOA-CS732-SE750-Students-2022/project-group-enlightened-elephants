@@ -6,6 +6,6 @@ import eepost from './eepost'
 router.use('/eepost', eepost)
 
 import user from './user';
-router.use('/', user);
+router.use('/user', user);
 
 export default router
