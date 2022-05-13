@@ -5,6 +5,7 @@ import { AuthContext } from '../../comtext/authContext'
 import useGet from '../../hooks/useGet'
 import usePost from '../../hooks/usePost'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import JSEncrypt from 'jsencrypt/bin/jsencrypt';
 
 export function LoginModal(props) {
 
@@ -31,6 +32,30 @@ export function LoginModal(props) {
     /* The event of finishing the form. */
     // TODO: 在这里写登录请求
     const login = (value) => {
+        // Get public key with pem
+        const pem  = useGet('/user/key')
+        // Encrypt
+        const encryptor = new JSEncrypt()
+        encryptor.setPublicKey(pem)
+        const ciphierText = encryptor.encrypt(value.password)
+        // Defien username and password
+        const body = {
+            username : value.username,
+            password : ciphierText
+        }
+        // Login
+        const {status, data} = usePost("/user/login", body)
+        if (status === 442) {
+            setErrMsg(data.message)
+            setErrModalVisible(true)
+        }else{
+            setUserName(data.user.username)
+            setUserId(data.user._id)
+            setToken(data.token)
+            setIsLogin(true)
+            setSuccessModalVisible(false)
+        }
+
 
 /*   // 获取私钥：
         const pem = useGet('/key',{})
@@ -63,6 +88,27 @@ export function LoginModal(props) {
         setUserName(value.username)
         setIsLogin(true)
         setSuccessModalVisible(true)
+
+        // Get public key with pem
+        const pem  = useGet('/user/key')
+        // Encrypt
+        const encryptor = new JSEncrypt()
+        encryptor.setPublicKey(pem)
+        const ciphierText = encryptor.encrypt(value.password)
+        // Defien username and password
+        const body = {
+            username : value.username,
+            password : ciphierText
+        }
+        // Register
+        const {status, data} = usePost("/user/register", body)
+        if (status === 442) {
+            setErrMsg(data.message)
+            setErrModalVisible(true)
+        }
+        else{
+            setSuccessModalVisible(false)
+        }
     }
 
 
