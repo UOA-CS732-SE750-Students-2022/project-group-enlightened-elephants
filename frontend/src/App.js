@@ -1,11 +1,16 @@
 import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import GetAll from "./GetALl";
+import GetByEntry from "./GetByEntry";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      {/* TODO */}
-    </div>
+    <Routes>
+      <Route path="getAll" element={<GetAll />} />
+      <Route path="getByEntry" element={<GetByEntry />} />
+    
+  
+    </Routes>
   );
 }
 
-export default App;
