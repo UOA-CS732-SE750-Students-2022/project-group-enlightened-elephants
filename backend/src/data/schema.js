@@ -40,9 +40,20 @@ const userSchema = new Schema({
     username: { type: String, unique: true},
     password: { type: String },
 })
+const comment = new Schema({
+    comment: {type: String},
+    post_id: {type: String},
+    user_id: {type:String},
+    replied_id: {type:String},
+    to_user_id: {type:String},
+    create_time: {type:String},
+    id: {type:String},  //?
 
+}, {collection: "comment"});
+//
+const comment_model = mongoose.model("comment", comment);
 const Eepost = mongoose.model('Eepost', eepostSchema)
 const Comment = mongoose.model('Comment', commentSchema)
 const User = mongoose.model('User', userSchema)
 
-export {Eepost,Comment,User}
+export {Eepost,Comment,User,comment_model}
