@@ -1,54 +1,44 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect,useContext } from 'react';
-import axios from 'axios'
+import { useState } from "react";
+import SearchBar from "./components/SearchBar/SearchBar";
+import Result from "./components/Result/Result";
 
-import PageLayout from './page/PageLayout';
-import Contact from './page/Contact';
-import Home from './page/Home'
-import useLocalStorage from './hooks/useLocalStorage';
-import {AuthContext} from './context/authContext'
-
+import "./App.css";
+import "./main.css";
 
 function App() {
-
-  const { isLogin, setIsLogin, userName, setUserName, setUserId } = useContext(AuthContext)
-  const [token, setToken] = useLocalStorage('token')
-
-  // Auto Login
-  useEffect(() => {
-    async function autoLogin() {
-      try {
-        const { data } = await axios({
-          method: 'get',
-          url: '/user/tokenLogin',
-          headers: {
-            token: token
-          }
-        })
-        if (data.success) {
-          setIsLogin(true)
-          setUserName(data.user.username)
-        }else{
-          setToken(null)
-          setIsLogin(false)
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    if (!isLogin && token) {
-      autoLogin()
-    }
-  },[])
+  const [results, setResults] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   return (
-    <Routes>
-      <Route path='/' element={<PageLayout />}>
-        <Route index element={<Navigate to="home" replace />} />
-        <Route path='home' element={<Home />} />
-        <Route path='contact' element={<Contact />}></Route>
-      </Route>
-    </Routes>
+    <main className="page-layout">
+      <div className="content-container">
+        <SearchBar setResults={setResults} setLoading={setLoading} />
+
+        {results && <p className="result-number">Displaying {results.length} results.</p>}
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ul className="results">
+            {results &&
+              results.map((result, index) => {
+                return (
+                  <li key={index}>
+                    <Result result={result} />
+                  </li>
+                );
+              })}
+          </ul>
+        )}
+      </div>
+      <p className="footer">
+        &lt;&lt; Powered by{" "}
+        <a href="https://en.wikipedia.org/wiki/Main_Page" rel="noreferrer" target="_blank" className="wikipedia">
+          wikipedia
+        </a>{" "}
+        &gt;&gt;
+      </p>
+    </main>
   );
 }
 
