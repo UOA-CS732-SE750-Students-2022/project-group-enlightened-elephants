@@ -3,32 +3,56 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 export default function Home() {
     const [value, setValue] = React.useState('');
+    const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [list, setList] = React.useState([]);
     const [history,setHistory] = useLocalStorage('history',[])
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
+    const handleChange = (event, value) => {
+        setValue(value);
     };
 
-    const handleClick = () => {
-      
-      const param = value.replace(/\s+/g,"")
-      console.log(param);
-      const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${param}&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
-      fetch(url, {
-        method: 'get'
-    }).then((res) =>res.json()
-    ).then((res)=>{
-      console.log(res.query.pages)
-    }).catch(function(err) {
-      console.log(err);
-    });
+    const handleClick = (option) => {
+        console.log('prop', option);
+    }
 
+    const handlePressEnter = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.defaultMuiPrevented = true;
+            // handleSearch();
+        }
+    }
+
+    const handleSearch = () => {
+        setLoading(true);
+        const param = value.replace(/\s+/g,"")
+        console.log(param);
+        const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
+            param.toLowerCase().trim()
+        }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
+        fetch(url, { method: 'get' })
+            .then((res) => res.json())
+            .then((res) => {
+                const array = [];
+                for (const key of Object.keys(res.query.pages)) {
+                    array.push(res.query.pages[key]);
+                }
+                setList(array);
+                console.log(list, array.length);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error(err);
+                setLoading(false);
+            });
     };
 
     const handleMouseDown = (event) => {
@@ -43,8 +67,16 @@ export default function Home() {
             </div>
             <Autocomplete
                 freeSolo
-                disableClearable
-                options={top100Films.map((option) => option.title)}
+                loading={loading}
+                open={open}
+                onOpen={() => {
+                    setOpen(true);
+                }}
+                onClose={() => {}}
+                inputValue={value}
+                onKeyUp={handlePressEnter}
+                onInputChange={handleChange}
+                filterOptions={(x) => x}
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -52,11 +84,12 @@ export default function Home() {
                         InputProps={{
                             ...params.InputProps,
                             type: 'search',
-                            endAdornment: <div>
+                            endAdornment: <div style={{ display: 'flex' }}>
+                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
                                 <InputAdornment position="end">
                                     <IconButton
                                         aria-label="search"
-                                        onClick={handleClick}
+                                        onClick={handleSearch}
                                         onMouseDown={handleMouseDown}
                                         edge="end"
                                     >
@@ -65,39 +98,40 @@ export default function Home() {
                                 </InputAdornment>
                             </div>
                         }}
-                        value={value}
-                        onChange={handleChange}
                     />
-                    /*<OutlinedInput
-                        {...params}
-                        fullWidth
-                        value={value}
-                        onChange={handleChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="search"
-                                    onClick={handleClick}
-                                    onMouseDown={handleMouseDown}
-                                    edge="end"
-                                >
-                                    <SearchIcon/>
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />*/
+                )}
+                noOptionsText="No results"
+                options={list}
+                getOptionLabel={(option) => `${option.pageid}`}
+                renderOption={(props, option) => (
+                    <li
+                        {...props}
+                        onClick={() => {
+                            handleClick(option);
+                        }}
+                    >
+                        <Box
+                            component="span"
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                flexShrink: 0,
+                                borderRadius: '3px',
+                                mr: 1,
+                                mt: '2px',
+                            }}
+                            style={{
+                                backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
+                            }}
+                        />
+                        <Box sx={{ flexGrow: 1 }}>
+                            {option.title}
+                            <br />
+                            <span style={{ fontSize: '14px' }}>{option.extract}</span>
+                        </Box>
+                    </li>
                 )}
             />
         </div>
     )
 }
-
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 },
-];
