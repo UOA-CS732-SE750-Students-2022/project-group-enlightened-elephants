@@ -8,7 +8,8 @@ import { styled } from '@mui/material/styles';
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import { Link } from "@mui/material";
+import { Link } from '@mui/material';
+import dayjs from 'dayjs';
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -27,7 +28,7 @@ const CommentsWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-const DateWrapper = styled('div')(({ theme }) => ({
+const DateWrapper = styled('div')(({}) => ({
     fontSize: '16px',
     lineHeight: '24px',
     padding: '4px',
@@ -144,7 +145,7 @@ export default function Post(props) {
                         >
                             Reply
                         </Button>
-                        <DateWrapper>22:22:22 22/05/2022</DateWrapper>
+                        <DateWrapper>{dayjs().format('HH:mm:ss DD/MM/YYYY')}</DateWrapper>
                     </CardActions>
                 </CardContent>
                 {comments.length > 0 && <CommentsWrapper>
@@ -186,7 +187,7 @@ export default function Post(props) {
                                 >
                                     Reply
                                 </Button>
-                                <DateWrapper>22:22:22 22/05/2022</DateWrapper>
+                                <DateWrapper>{dayjs().format('HH:mm:ss DD/MM/YYYY')}</DateWrapper>
                             </CardActions>
                         </div>
                     ))}
