@@ -45,14 +45,11 @@ export function LoginModal(props) {
             username : value.username,
             password : ciphierText
         }
-        console.log(userInfo.username);
+        //console.log(userInfo.username);
         const body = JSON.stringify(userInfo)
         // Login
-        const {status, data} = await axios.post("/user/login", userInfo).catch((error) => {
-            setErrMsg(error.response.data.message)
-            setErrModalVisible(true)
-        })
-        if (status === 442) {
+        const {status, data} = await axios.post("/user/login", userInfo)
+        if (data.success === false) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }else{
@@ -66,9 +63,6 @@ export function LoginModal(props) {
 
     // 在这里写注册请求，逻辑同上
     const register = async (value) => {
-        setUserName(value.username)
-        setIsLogin(true)
-        setSuccessModalVisible(true)
 
         // Get public key with pem
         const pem  = (await axios.get('/user/key')).data
@@ -82,12 +76,8 @@ export function LoginModal(props) {
             password : ciphierText
         }
         // Register
-        const {status, data} = await axios.post("/user/register", body).catch((error) => {
-            console.log(error)
-            setErrMsg(error.response.data.message)
-            setErrModalVisible(true)
-        })
-        if (status === 442) {
+        const {status, data} = await axios.post("/user/register", body)
+        if (data.success === false) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }
@@ -96,7 +86,7 @@ export function LoginModal(props) {
             setUserId(data.user._id)
             setToken(data.token)
             setIsLogin(true)
-            setSuccessModalVisible(false)
+            setSuccessModalVisible(true)
         }
     }
 
