@@ -1,3 +1,4 @@
+import './App.css';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import { useEffect,useContext } from 'react';
 import axios from 'axios'
