@@ -93,42 +93,42 @@ export default function PrimarySearchAppBar() {
     );
 
     return (
-      <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-              <Toolbar>
-                  <Link to={{ pathname: '/home' }}>
-                      <Button variant="text">
-                          <span className="App-title">Enlightened Elephants</span>
-                      </Button>
-                  </Link>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Link to={{ pathname: '/home' }}>
+                        <Button variant="text">
+                            <span className="App-title">Enlightened Elephants</span>
+                        </Button>
+                    </Link>
 
-                  {location.pathname === '/result' && <Search>
-                      <SearchIconWrapper>
-                          <SearchIcon/>
-                      </SearchIconWrapper>
-                      <StyledInputBase
-                        placeholder="Search…"
-                        inputProps={{'aria-label': 'search'}}
-                      />
-                  </Search>}
-                  <Box sx={{ flexGrow: 1 }} />
-                  <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                      <Button
-                        variant="outlined"
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={signInId}
-                        aria-haspopup="true"
-                        onClick={handleSignInOpen}
-                        color="inherit"
-                      >
-                          Sign in
-                      </Button>
-                  </Box>
-              </Toolbar>
-          </AppBar>
-          {renderSignIn}
-      </Box>
+                    {location.pathname === '/result' && <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon/>
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{'aria-label': 'search'}}
+                        />
+                    </Search>}
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={signInId}
+                            aria-haspopup="true"
+                            onClick={handleSignInOpen}
+                            color="inherit"
+                        >
+                            Sign in
+                        </Button>
+                    </Box>
+                </Toolbar>
+            </AppBar>
+            {renderSignIn}
+        </Box>
     );
 }
