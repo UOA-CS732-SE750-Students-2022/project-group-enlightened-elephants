@@ -20,7 +20,7 @@ export default function BasicStack() {
         <Box style={{ width: '50%', marginBottom: '24px' }}>
             <Wrapper>
                 <Stack spacing={2}>
-                    {(data.eepost || []).map((item, index) => (<Post key={index} {...item}/>))}
+                    {(data.eeposts || []).map((item, index) => (<Post key={index} {...item}/>))}
                 </Stack>
             </Wrapper>
             <Editor/>
