@@ -6,6 +6,8 @@ import Add from "./Add";
 import Update from "./Update";
 import Like from "./Like";
 import Delete from "./Delete";
+import GetAllComment from "./GetAllComment";
+import GetById from "./GetById";
 
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
       <Route path="update" element={<Update />} />
       <Route path="like" element={<Like />} />
       <Route path="delete" element={<Delete />} />
+      <Route path="getAllComment" element={<GetAllComment />} />
+      <Route path="getById" element={<GetById />} />
     
   
     </Routes>
