@@ -5,16 +5,30 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export default function Home() {
     const [value, setValue] = React.useState('');
+    const [history,setHistory] = useLocalStorage('history',[])
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
 
     const handleClick = () => {
-        console.log('search', value);
+      
+      const param = value.replace(/\s+/g,"")
+      console.log(param);
+      const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${param}&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
+      fetch(url, {
+        method: 'get'
+    }).then((res) =>res.json()
+    ).then((res)=>{
+      console.log(res.query.pages)
+    }).catch(function(err) {
+      console.log(err);
+    });
+
     };
 
     const handleMouseDown = (event) => {

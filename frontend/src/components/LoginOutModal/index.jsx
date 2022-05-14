@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
+import { Modal, Tabs, Form, Input, Button, Checkbox, Spin } from 'antd'
 import { UserOutlined, LockOutlined} from '@ant-design/icons'
 import axios from 'axios'
 import { AuthContext } from '../../context/authContext'
@@ -132,6 +132,7 @@ export function LoginModal(props) {
                                     },
                                 ]}
                             >
+                                <Spin/>
                                 <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                             </Form.Item>
                             <Form.Item
