@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 import { useLocation } from 'react-router'
 
 import { LoginModal } from '../LoginOutModal'
@@ -52,26 +54,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function PrimarySearchAppBar() {
-
+export default function Nav() {
     const [loginModalVisible, setLoginModalVisible] = React.useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false)
     const { isLogin, userName } = React.useContext(AuthContext)
 
     const location = useLocation()
-
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const isSignInOpen = Boolean(anchorEl);
 
-    const handleSignInOpen = (event) => {
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleSignInOpen = () => {
         setLoginModalVisible(true)
     };
 
     const handleSignOutOpen = ()=>{
         setLogoutModalVisible(true)
     }
-
-    const signInId = isSignInOpen ? 'primary-search-account-SignIn' : undefined;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -94,22 +99,54 @@ export default function PrimarySearchAppBar() {
                     </Search>}
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <Button
-                            variant="outlined"
+                        {!isLogin && (<Button
                             size="large"
                             edge="end"
                             aria-label="account of current user"
-                            aria-controls={signInId}
-                            aria-haspopup="true"
                             onClick={handleSignInOpen}
                             color="inherit"
                         >
-                            Sign in
-                        </Button>
+                            Login
+                        </Button>)}
+                        {isLogin && (<div>
+                            <Button
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <span style={{ textTransform: 'none' }}>{userName}</span>
+                            </Button>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleCloseMenu}
+                            >
+                                <MenuItem onClick={handleSignOutOpen}>Log out</MenuItem>
+                            </Menu>
+                        </div>)}
                     </Box>
                 </Toolbar>
             </AppBar>
-            <LoginModal loginModalVisible={loginModalVisible} setLoginModalVisible={setLoginModalVisible} logoutModalVisible={logoutModalVisible} setLogoutModalVisible={setLogoutModalVisible} />
+            <LoginModal
+                loginModalVisible={loginModalVisible}
+                setLoginModalVisible={setLoginModalVisible}
+                logoutModalVisible={logoutModalVisible}
+                setLogoutModalVisible={setLogoutModalVisible}
+            />
         </Box>
     );
 }

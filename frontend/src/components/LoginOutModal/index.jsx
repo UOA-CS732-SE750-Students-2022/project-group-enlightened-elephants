@@ -252,7 +252,7 @@ export function LoginModal(props) {
                     </Button>
                     ]
                 }>
-                Confirm Quit!
+                Do you confirm to quit?
             </Modal>
         </ >
     )
