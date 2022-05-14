@@ -47,7 +47,7 @@ router.post('/register', auth, async (req, res) => {
 // login api
 router.post('/login', auth, async (req, res) => {
     const user = await find(req.body.username)
-    if(user == null){
+    if(user === null){
         return res.status(422).send({
             message: 'there is no the user'
         })

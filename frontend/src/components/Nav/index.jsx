@@ -2,8 +2,9 @@ import React, { useContext, useState } from 'react'
 import { Menu, Modal, Button } from 'antd'
 import { HomeOutlined, UserOutlined, LoginOutlined, MailOutlined, LogoutOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import SubMenu from 'antd/lib/menu/SubMenu'
-import { LoginModal } from '../LoginModal'
+import { LoginModal } from '../LoginOutModal'
 import { AuthContext } from '../../comtext/authContext'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
@@ -13,7 +14,28 @@ export default function Nav() {
     var [loginModalVisible, setLoginModalVisible] = useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const { isLogin, setIsLogin, userName, setUserName, userId, setUserId } = useContext(AuthContext)
+
     const [token, setToken] = useLocalStorage('token')
+
+    const autoLogin =async () => {
+        try {
+            const {data} = await axios({
+                method: 'get',
+                url: '/user/tokenLogin',
+                headers: {
+                    token: token
+                }
+            })
+            setUserName(data.setUserName(data.user.username))
+            setIsLogin(true)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (!isLogin && token) {
+        autoLogin()
+    }
 
     /* 
       The click event of menu: 
@@ -31,13 +53,13 @@ export default function Nav() {
         }
     }
 
-    const logOut = () => {
-        setIsLogin(false)
-        setUserName(null)
-        setUserId(null)
-        setToken(null)
-        setLogoutModalVisible(false)
-    }
+    // const logOut = () => {
+    //     setIsLogin(false)
+    //     setUserName(null)
+    //     setUserId(null)
+    //     setToken(null)
+    //     setLogoutModalVisible(false)
+    // }
 
     return (
         <div>
@@ -65,8 +87,8 @@ export default function Nav() {
                     </Menu.Item>
                 }
             </Menu>
-            <LoginModal loginModalVisible={loginModalVisible} setLoginModalVisible={setLoginModalVisible} />
-            <Modal
+            <LoginModal loginModalVisible={loginModalVisible} setLoginModalVisible={setLoginModalVisible} logoutModalVisible={logoutModalVisible} setLogoutModalVisible={setLogoutModalVisible} />
+            {/* <Modal
                 title="Logout"
                 visible={logoutModalVisible}
                 onCancel={() => setLogoutModalVisible(false)}
@@ -80,7 +102,7 @@ export default function Nav() {
                     ]
                 }>
                 Confirm Quit!
-            </Modal>
+            </Modal> */}
         </div >
     )
 }

@@ -8,7 +8,7 @@ import JSEncrypt from 'jsencrypt/bin/jsencrypt';
 
 export function LoginModal(props) {
 
-    const {loginModalVisible, setLoginModalVisible} = props
+    const {loginModalVisible, setLoginModalVisible, logoutModalVisible, setLogoutModalVisible} = props
     const {setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
@@ -43,19 +43,19 @@ export function LoginModal(props) {
             username : value.username,
             password : ciphierText
         }
-        console.log(userInfo.username);
-        const body = JSON.stringify(userInfo)
+        // console.log(userInfo.username);
+        // const body = JSON.stringify(userInfo)
         // Login
         const {status, data} = await axios.post("/user/login", userInfo).catch((error) => {
             setErrMsg(error.response.data.message)
             setErrModalVisible(true)
         })
-        if (status === 442) {
+        if (status === 422) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }else{
             setUserName(data.user.username)
-            setUserId(data.user._id)
+            // setUserId(data.user._id)
             setToken(data.token)
             setIsLogin(true)
             setSuccessModalVisible(true)
@@ -64,9 +64,6 @@ export function LoginModal(props) {
 
     // 在这里写注册请求，逻辑同上
     const register = async (value) => {
-        setUserName(value.username)
-        setIsLogin(true)
-        setSuccessModalVisible(true)
 
         // Get public key with pem
         const pem  = (await axios.get('/user/key')).data
@@ -89,15 +86,22 @@ export function LoginModal(props) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }
-        else{
+        if (status === 200){
             setUserName(data.user.username)
-            setUserId(data.user._id)
+            // setUserId(data.user._id)
             setToken(data.token)
             setIsLogin(true)
             setSuccessModalVisible(false)
         }
     }
 
+    const logOut = () => {
+        setIsLogin(false)
+        setUserName(null)
+        setUserId(null)
+        setToken(null)
+        setLogoutModalVisible(false)
+    }
 
     return (
         <>
@@ -240,6 +244,21 @@ export function LoginModal(props) {
                     </Button>]
                 }>
                 Error occur: {errMsg}
+            </Modal>
+            <Modal
+                title="Logout"
+                visible={logoutModalVisible}
+                onCancel={() => setLogoutModalVisible(false)}
+                footer={[
+                    <Button key="ok" onClick={logOut}>
+                        Ok
+                    </Button>,
+                    <Button key="cancel" onClick={() => setLogoutModalVisible(false)}>
+                        Cancel
+                    </Button>
+                    ]
+                }>
+                Confirm Quit!
             </Modal>
         </ >
     )

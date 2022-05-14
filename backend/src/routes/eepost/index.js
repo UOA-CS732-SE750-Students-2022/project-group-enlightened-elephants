@@ -1,12 +1,12 @@
 import express from 'express';
 import {retrieveAllEepostList,addEepost,retrieveEepostListByEntryId,deleteEepost,updateEepost,like} from '../../data/post-data/eepostDao';
+import {token} from '../../helper/token'
 
 const router = express.Router();
 
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 const HTTP_ACCEPTED = 202;
-const HTTP_NOT_FOUND = 404;
 const HTTP_NO_CONTENT = 204;
 
 // Retrieve all posts
@@ -23,13 +23,14 @@ router.get('/getByEntry', async (req, res) => {
 })
 
 // Add new post
-router.post('/add', async (req, res) => {
-    const body = req.body
-    const eepostDoc = {
+router.post('/add', token, async (req, res) => {
+    console.log(req.headers);
+    const body = req.body 
+    const eepostDoc = { 
         entry_id: body.entry_id,
         entry_title: body.entry_title,
         content: body.content,
-        user_id: body.user_id,
+        user_id: body.user_id, 
         user_name: body.user_name
     }
     const newEepost = await addEepost(eepostDoc)
@@ -54,7 +55,7 @@ router.post('/update', async (req, res) => {
         res.sendStatus(HTTP_ACCEPTED)
         console.log(`Data (_id:${result._id}) is updated!`)
     } else {
-        res.sendStatus(HTTP_NOT_FOUND)
+        res.sendStatus(HTTP_NO_CONTENT)
         console.log(`id:${id} not found!`);
     }
 })
@@ -68,7 +69,7 @@ router.get('/like/:id', async (req,res) => {
         res.sendStatus(HTTP_ACCEPTED)
     } else {
         console.log(`${id} not found!`);
-        res.sendStatus(HTTP_NOT_FOUND)
+        res.sendStatus(HTTP_NO_CONTENT)
     }
  })
 
