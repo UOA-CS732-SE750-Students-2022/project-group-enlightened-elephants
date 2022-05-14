@@ -16,7 +16,7 @@ import {AuthContext} from "../../context/authContext";
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
-    fontSize: '18px',
+    fontSize: '14px',
 }));
 
 const ReplyWrapper = styled('div')(({ theme }) => ({
@@ -32,14 +32,15 @@ const CommentsWrapper = styled('div')(({ theme }) => ({
 }));
 
 const DateWrapper = styled('div')(({}) => ({
-    fontSize: '16px',
-    lineHeight: '24px',
+    fontSize: '14px',
+    lineHeight: '22px',
     padding: '4px',
 }));
 
 export default function Post(props) {
     const {
         getPost,
+        _id,
         user_name = 'unknown',
         content = '...',
         updatedAt,
@@ -55,6 +56,7 @@ export default function Post(props) {
 
     const [token] = useLocalStorage('token');
     const { isLogin, userName } = React.useContext(AuthContext);
+    const [param, setParam] = React.useState({});
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
@@ -69,7 +71,8 @@ export default function Post(props) {
         setFold(!fold);
     }
 
-    const handleReplyOpen = (event) => {
+    const handleReplyOpen = (event, data) => {
+        setParam(data);
         setAnchorEl(event.currentTarget);
     };
 
@@ -94,12 +97,10 @@ export default function Post(props) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            'post_id':"32452432",
+            'post_id': _id,
             comment: data.get('content'),
             'user_name': userName,
-            // 'replied_id': '',
-            // 'to_user_id': '',
-            // 'to_user_name': '',
+            ...param,
         }
         addComment(body).then(props.getPost);
     };
@@ -131,7 +132,7 @@ export default function Post(props) {
                             value={value}
                             onChange={handleChange}
                             placeholder="Please type here.."
-                            style={{ width: '100vh' }}
+                            style={{ width: '45vh' }}
                         />
                     </ReplyWrapper>
                     <ReplyWrapper style={{ paddingTop: '0', textAlign: 'right' }}>
@@ -156,9 +157,9 @@ export default function Post(props) {
                 <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
                     <Typography gutterBottom component="div">
                         <Link>{user_name}</Link>
-                        <span style={{ fontSize: '16px' }}> says:</span>
+                        <span style={{ fontSize: '14px' }}> says:</span>
                     </Typography>
-                    <Typography style={{ fontSize: '16px' }}>
+                    <Typography style={{ fontSize: '14px' }}>
                         {content}
                     </Typography>
                     <CardActions style={{ flexDirection: 'row-reverse', alignItems: 'baseline' }}>
@@ -167,7 +168,10 @@ export default function Post(props) {
                             aria-label="account of current user"
                             aria-controls={replyId}
                             aria-haspopup="true"
-                            onClick={handleReplyOpen}
+                            disabled={!isLogin}
+                            onClick={(event) => {
+                                handleReplyOpen(event, {});
+                            }}
                         >
                             Reply
                         </Button>
@@ -176,8 +180,8 @@ export default function Post(props) {
                         </DateWrapper>
                     </CardActions>
                 </CardContent>
-                {comments.length > 0 && <CommentsWrapper>
-                    <div style={{ lineHeight: '26px', padding: '4px' }}>
+                {comments.length > 0 && <CommentsWrapper style={{ marginBottom: fold ? '' : 0 }}>
+                    <div style={{ lineHeight: '22px', padding: '4px' }}>
                         <b>Comments:</b>
                     </div>
                     <Button
@@ -196,13 +200,13 @@ export default function Post(props) {
                 >
                     {comments.map((item, index) => (
                         <div key={index}>
-                            <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
-                                <Typography gutterBottom component="div" style={{ fontSize: '16px' }}>
+                            <CardContent sx={{ flexGrow: 1 }} style={{ paddingTop: '0', paddingBottom: '0' }}>
+                                <Typography gutterBottom component="div" style={{ fontSize: '14px' }}>
                                     <Link>{item.user_name}</Link>
                                     <span> replied </span>
                                     <Link>{item.to_user_name}</Link>:
                                 </Typography>
-                                <Typography style={{ fontSize: '16px' }}>
+                                <Typography style={{ fontSize: '14px' }}>
                                     {item.content}
                                 </Typography>
                             </CardContent>
@@ -212,7 +216,14 @@ export default function Post(props) {
                                     aria-label="account of current user"
                                     aria-controls={replyId}
                                     aria-haspopup="true"
-                                    onClick={handleReplyOpen}
+                                    disabled={!isLogin}
+                                    onClick={(event) => {
+                                        handleReplyOpen(event, {
+                                            replied_id: item._id,
+                                            to_user_id: item.user_id,
+                                            to_user_name: item.user_name,
+                                        });
+                                    }}
                                 >
                                     Reply
                                 </Button>

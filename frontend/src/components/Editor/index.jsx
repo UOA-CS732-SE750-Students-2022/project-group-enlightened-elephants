@@ -59,7 +59,7 @@ export default function Editor(props) {
                 <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            label="Content"
+                            label="Add a new post..."
                             name="content"
                             multiline
                             minRows={5}
@@ -67,14 +67,16 @@ export default function Editor(props) {
                             onChange={handleChange}
                             placeholder="Please type here.."
                             style={{ width: '100%' }}
+                            disabled={!isLogin}
                         />
                         <RightButtonWrapper>
                             <Button
                                 size="small"
                                 type="submit"
                                 variant="contained"
+                                disabled={!isLogin}
                             >
-                                Add a new post
+                                Post
                             </Button>
                         </RightButtonWrapper>
                     </Box>
