@@ -4,7 +4,7 @@ import PageLayout from './page/PageLayout';
 import Result from './page/Result';
 import Home from './page/Home'
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -18,4 +18,3 @@ function App() {
   );
 }
 
-export default App;
