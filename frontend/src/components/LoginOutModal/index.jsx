@@ -19,7 +19,7 @@ export function LoginModal(props) {
 
     const { TabPane } = Tabs;
 
-    /*
+    /* 
         The event of closing the Model
     */
     const handleCancel = () => {
@@ -111,7 +111,7 @@ export function LoginModal(props) {
                 {/* Tabs component of Antd. */}
                 <Tabs defaultActiveKey="login">
                     <TabPane tab="Login" key="login">
-                        {/*
+                        {/* 
                             THe Form component of Antd.
                         */}
                         <Form

@@ -6,10 +6,11 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
-import Popover from '@mui/material/Popover';
 import SearchIcon from '@mui/icons-material/Search';
-import SignIn from '../SignIn';
 import { useLocation } from 'react-router'
+
+import { LoginModal } from '../LoginOutModal'
+import { AuthContext } from '../../context/authContext'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -37,11 +38,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const SignInWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(2, 2),
-    width: '300px',
-}));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
@@ -57,40 +53,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+
+    const [loginModalVisible, setLoginModalVisible] = React.useState(false)
+    const [logoutModalVisible, setLogoutModalVisible] = React.useState(false)
+    const { isLogin, userName } = React.useContext(AuthContext)
+
     const location = useLocation()
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isSignInOpen = Boolean(anchorEl);
 
     const handleSignInOpen = (event) => {
-        setAnchorEl(event.currentTarget);
+        setLoginModalVisible(true)
     };
 
-    const handleSignInClose = () => {
-        setAnchorEl(null);
-    };
+    const handleSignOutOpen = ()=>{
+        setLogoutModalVisible(true)
+    }
 
     const signInId = isSignInOpen ? 'primary-search-account-SignIn' : undefined;
-    const renderSignIn = (
-        <Popover
-            id={signInId}
-            open={isSignInOpen}
-            anchorEl={anchorEl}
-            onClose={handleSignInClose}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-        >
-            <SignInWrapper>
-                <SignIn/>
-            </SignInWrapper>
-        </Popover>
-    );
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -128,7 +109,7 @@ export default function PrimarySearchAppBar() {
                     </Box>
                 </Toolbar>
             </AppBar>
-            {renderSignIn}
+            <LoginModal loginModalVisible={loginModalVisible} setLoginModalVisible={setLoginModalVisible} logoutModalVisible={logoutModalVisible} setLogoutModalVisible={setLogoutModalVisible} />
         </Box>
     );
 }

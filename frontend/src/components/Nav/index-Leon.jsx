@@ -2,40 +2,17 @@ import React, { useContext, useState } from 'react'
 import { Menu, Modal, Button } from 'antd'
 import { HomeOutlined, UserOutlined, LoginOutlined, MailOutlined, LogoutOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import SubMenu from 'antd/lib/menu/SubMenu'
+
 import { LoginModal } from '../LoginOutModal'
 import { AuthContext } from '../../context/authContext'
-import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Nav() {
 
     var [current, setCurrent] = useState('home')
     var [loginModalVisible, setLoginModalVisible] = useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
-    const { isLogin, setIsLogin, userName, setUserName, userId, setUserId } = useContext(AuthContext)
-
-    // const [token, setToken] = useLocalStorage('token')
-
-    // const autoLogin =async () => {
-    //     try {
-    //         const {data} = await axios({
-    //             method: 'get',
-    //             url: '/user/tokenLogin',
-    //             headers: {
-    //                 token: token
-    //             }
-    //         })
-    //         setUserName(data.setUserName(data.user.username))
-    //         setIsLogin(true)
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-    // if (!isLogin && token) {
-    //     autoLogin()
-    // }
+    const { isLogin, userName } = useContext(AuthContext)
 
     /* 
       The click event of menu: 
@@ -52,14 +29,6 @@ export default function Nav() {
             setLogoutModalVisible(true)
         }
     }
-
-    // const logOut = () => {
-    //     setIsLogin(false)
-    //     setUserName(null)
-    //     setUserId(null)
-    //     setToken(null)
-    //     setLogoutModalVisible(false)
-    // }
 
     return (
         <div>
@@ -88,21 +57,6 @@ export default function Nav() {
                 }
             </Menu>
             <LoginModal loginModalVisible={loginModalVisible} setLoginModalVisible={setLoginModalVisible} logoutModalVisible={logoutModalVisible} setLogoutModalVisible={setLogoutModalVisible} />
-            {/* <Modal
-                title="Logout"
-                visible={logoutModalVisible}
-                onCancel={() => setLogoutModalVisible(false)}
-                footer={[
-                    <Button key="ok" onClick={logOut}>
-                        Ok
-                    </Button>,
-                    <Button key="cancel" onClick={() => setLogoutModalVisible(false)}>
-                        Cancel
-                    </Button>
-                    ]
-                }>
-                Confirm Quit!
-            </Modal> */}
         </div >
     )
 }
