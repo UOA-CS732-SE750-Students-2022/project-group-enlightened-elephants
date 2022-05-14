@@ -4,26 +4,40 @@ import Stack from '@mui/material/Stack';
 import Post from '../components/Post';
 import Editor from '../components/Editor';
 import { styled } from '@mui/material/styles';
-import useGet from '../useGet';
+import axios from "axios";
 
 const Wrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(2, 0),
   minHeight: '400px',
 }));
 
-export default function BasicStack() {
-    const { data } = useGet('/eepost/getByEntry?entry_id=Entry-id-b&pageNum=1', []);
+export default function PostView() {
+    const [postList, setPostList] = React.useState([]);
+    let total = 0;
 
-    // const data = { count: 1, eepost: [{id:99,name:'tets'}]}
+    const getPost = async () => {
+        const url = '/eepost/getByEntry?entry_id=Entry-id-b&pageNum=1';
+        axios.get(url).then(res => {
+            const data = res.data;
+            setPostList(data.eeposts || []);
+            if (data.count > 0) total = data.count;
+        });
+    }
+
+    React.useEffect(() => {
+        getPost().then();
+    }, []);
 
     return (
         <Box style={{ width: '50%', marginBottom: '24px' }}>
             <Wrapper>
                 <Stack spacing={2}>
-                    {(data.eeposts || []).map((item, index) => (<Post key={index} {...item}/>))}
+                    {postList.map((item, index) => (
+                        <Post key={index} getPost={getPost} {...item}/>
+                    ))}
                 </Stack>
             </Wrapper>
-            <Editor/>
+            <Editor getPost={getPost}/>
         </Box>
     );
 }

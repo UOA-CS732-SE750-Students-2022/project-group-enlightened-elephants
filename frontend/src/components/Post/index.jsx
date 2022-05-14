@@ -10,6 +10,9 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { Link } from '@mui/material';
 import dayjs from 'dayjs';
+import axios from "axios";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import {AuthContext} from "../../context/authContext";
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -36,6 +39,7 @@ const DateWrapper = styled('div')(({}) => ({
 
 export default function Post(props) {
     const {
+        getPost,
         user_name = 'unknown',
         content = '...',
         updatedAt,
@@ -49,6 +53,8 @@ export default function Post(props) {
         ],
     } = props;
 
+    const [token] = useLocalStorage('token');
+    const { isLogin, userName } = React.useContext(AuthContext);
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
@@ -72,12 +78,30 @@ export default function Post(props) {
         setValue('');
     };
 
+    const addComment = async (data) => {
+        await axios({
+            method: 'post',
+            url: '/comment/add', // '/comment/reply'
+            headers: {
+                token: token,
+            },
+            data,
+        });
+        handleReplyClose();
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            content: data.get('content'),
-        });
+        const body = {
+            'post_id':"32452432",
+            comment: data.get('content'),
+            'user_name': userName,
+            // 'replied_id': '',
+            // 'to_user_id': '',
+            // 'to_user_name': '',
+        }
+        addComment(body).then(props.getPost);
     };
 
     const replyId = isReplyOpen ? 'primary-search-account-reply' : undefined;
@@ -167,6 +191,7 @@ export default function Post(props) {
                     style={{
                         display: fold ? 'none' : 'block',
                         paddingTop: 0,
+                        paddingBottom: 0,
                     }}
                 >
                     {comments.map((item, index) => (

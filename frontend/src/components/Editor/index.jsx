@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import TextField from "@mui/material/TextField";
+import axios from 'axios';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { AuthContext } from '../../context/authContext';
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -15,14 +18,37 @@ const RightButtonWrapper = styled('div')(({ theme }) => ({
     textAlign: 'right',
 }));
 
-export default function Editor() {
+export default function Editor(props) {
+    const [token] = useLocalStorage('token');
+    const { isLogin, userName } = React.useContext(AuthContext);
+    const [value, setValue] = React.useState('');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const addPost = async (data) => {
+        await axios({
+            method: 'post',
+            url: '/eepost/add',
+            headers: {
+                token: token,
+            },
+            data,
+        });
+        setValue('');
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const body = {
+            'entry_id':"32452432",
+            'entry_title':"hello",
             content: data.get('content'),
-        });
+            'user_name': userName,
+        }
+        addPost(body).then(props.getPost);
     };
 
     return (
@@ -37,6 +63,8 @@ export default function Editor() {
                             name="content"
                             multiline
                             minRows={5}
+                            value={value}
+                            onChange={handleChange}
                             placeholder="Please type here.."
                             style={{ width: '100%' }}
                         />
