@@ -1,31 +1,81 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function Home() {
-  return (
-    <div style={{ padding: '10em', textAlign: 'center' }}>
-      <div style={{ marginBottom: '12px' }}>
-        <span className="App-title" style={{ color: 'black', marginRight: '8px' }}>Enlightened Elephants</span>
-        <span style={{ lineHeight: '34px', fontSize: '22px' }}>Wikipedia Forum</span>
-      </div>
-      <Autocomplete
-        freeSolo
-        disableClearable
-        options={top100Films.map((option) => option.title)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Input and search..."
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-            }}
-          />
-        )}
-      />
-    </div>
-  )
+    const [value, setValue] = React.useState('');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const handleClick = () => {
+        console.log('search', value);
+    };
+
+    const handleMouseDown = (event) => {
+        event.preventDefault();
+    };
+
+    return (
+        <div style={{ padding: '10em', textAlign: 'center' }}>
+            <div style={{ marginBottom: '12px' }}>
+                <span className="App-title" style={{ color: 'black', marginRight: '8px' }}>Enlightened Elephants</span>
+                <span style={{ lineHeight: '34px', fontSize: '22px' }}>Wikipedia Forum</span>
+            </div>
+            <Autocomplete
+                freeSolo
+                disableClearable
+                options={top100Films.map((option) => option.title)}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Input and search..."
+                        InputProps={{
+                            ...params.InputProps,
+                            type: 'search',
+                            endAdornment: <div>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="search"
+                                        onClick={handleClick}
+                                        onMouseDown={handleMouseDown}
+                                        edge="end"
+                                    >
+                                        <SearchIcon/>
+                                    </IconButton>
+                                </InputAdornment>
+                            </div>
+                        }}
+                        value={value}
+                        onChange={handleChange}
+                    />
+                    /*<OutlinedInput
+                        {...params}
+                        fullWidth
+                        value={value}
+                        onChange={handleChange}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="search"
+                                    onClick={handleClick}
+                                    onMouseDown={handleMouseDown}
+                                    edge="end"
+                                >
+                                    <SearchIcon/>
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />*/
+                )}
+            />
+        </div>
+    )
 }
 
 const top100Films = [
