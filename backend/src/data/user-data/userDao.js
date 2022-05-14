@@ -11,4 +11,8 @@ async function find(username){
     return await User.findOne({username: username})
 }
 
-export  {addUser, find}
+async function findById(id){
+    return await User.findOne({_id: id})
+}
+
+export  {addUser, find, findById}
