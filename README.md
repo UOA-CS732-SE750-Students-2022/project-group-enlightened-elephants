@@ -44,3 +44,54 @@ Support the opinion you like or you think important.
 Delete the post or comment that might be wrong.
 
 ***
+
+### Technologies
+
+As we use MERN stack to build the application, we build a frontend application with React and an express application with Express. Store data in a MongDB. Modify and add customized functions to the applications with Nodejs. Except React and Express, we can download other node moduals to enable more functions in both frontend and backend.
+
+#### Frontend
+
+* React Router. Navigate to different areas of the application via the URL path without actually making additional server requests.
+* React hooks. Execute code at various points within a component's lifecycle.
+* Ant Design. A UI library based on React.
+* Jsencrypt. A good solution to RSA Javascript encryption.
+
+#### Backend
+* Express Router. Navigate to rescources in the server
+* jsonwebtoken. Generate and verify the decrypted token containing the user information.
+
+## Getting Started
+
+### Preconditions
+
+Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/), [React](https://reactjs.org/) , and [Node.js](https://nodejs.org/en/)
+
+### Installing
+
+1. Clone this repo
+
+       git clone https://github.com/henrispkl/MernBB.git
+
+
+
+2. Go to the folder and install all dependencies
+
+* Install dependencies for frontend
+
+      cd frontend
+      npm install
+
+* Install dependencies for backend
+
+      cd backend
+      npm install
+
+3. Build the project
+
+      npm run build
+
+### Executing
+
+* Executing in production
+
+      npm start
