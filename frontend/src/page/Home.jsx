@@ -16,9 +16,22 @@ export default function Home() {
     };
 
     const handleClick = () => {
-      
-      const param = value.replace(/\s+/g,"")
-      console.log(param);
+
+      if (!history && !(history instanceof Array)) {
+        setHistory([])
+      }
+
+      history.map((item,index) => { 
+        if(item === value){
+          history.splice(index, 1);
+        }
+       })
+       if (history.length >= 10) {
+         history.splice(0, 1);
+        }
+      setHistory([...history,value])
+
+      const param = value.replace(/\s+/g,"/")
       const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${param}&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
       fetch(url, {
         method: 'get'
@@ -44,7 +57,7 @@ export default function Home() {
             <Autocomplete
                 freeSolo
                 disableClearable
-                options={top100Films.map((option) => option.title)}
+                options={history.reverse().map((option) => option)}
                 renderInput={(params) => (
                     <TextField
                         {...params}
