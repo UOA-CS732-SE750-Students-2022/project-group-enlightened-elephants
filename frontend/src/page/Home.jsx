@@ -23,10 +23,46 @@ export default function Home() {
     console.log(res);
   }
 
+  const addComment = async () => {
+    const res = await axios({
+      method: 'post',
+      url: '/comment/add',
+      headers:{
+        token: token
+      },
+      data: {
+        comment: "a new comment",
+        post_id: "627f5b4858f99170618e5f73",
+        user_name: "user01"
+    }
+    })
+    console.log(res);
+  }
+
+  const reply = async () => {
+    const res = await axios({
+      method: 'post',
+      url: '/comment/reply',
+      headers:{
+        token: token
+      },
+      data: {
+        comment: "a new reply",
+        post_id: "627f5b4858f99170618e5f73",
+        user_name: "user01",
+        replied_id: "627f5b5c58f99170618e5f76",
+        to_user_name: "user01"
+    }
+    })
+    console.log(res);
+  }
+
   return (
     <div>
       <h1>Home</h1>
       <button onClick={add}>add</button>
+      <button onClick={addComment}>addcomment</button>
+      <button onClick={reply}>reply</button>
     </div>
   )
 }

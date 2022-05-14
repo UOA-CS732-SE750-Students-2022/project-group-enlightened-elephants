@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SubMenu from 'antd/lib/menu/SubMenu'
 import { LoginModal } from '../LoginOutModal'
-import { AuthContext } from '../../comtext/authContext'
+import { AuthContext } from '../../context/authContext'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Nav() {
@@ -15,27 +15,27 @@ export default function Nav() {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const { isLogin, setIsLogin, userName, setUserName, userId, setUserId } = useContext(AuthContext)
 
-    const [token, setToken] = useLocalStorage('token')
+    // const [token, setToken] = useLocalStorage('token')
 
-    const autoLogin =async () => {
-        try {
-            const {data} = await axios({
-                method: 'get',
-                url: '/user/tokenLogin',
-                headers: {
-                    token: token
-                }
-            })
-            setUserName(data.setUserName(data.user.username))
-            setIsLogin(true)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // const autoLogin =async () => {
+    //     try {
+    //         const {data} = await axios({
+    //             method: 'get',
+    //             url: '/user/tokenLogin',
+    //             headers: {
+    //                 token: token
+    //             }
+    //         })
+    //         setUserName(data.setUserName(data.user.username))
+    //         setIsLogin(true)
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
-    if (!isLogin && token) {
-        autoLogin()
-    }
+    // if (!isLogin && token) {
+    //     autoLogin()
+    // }
 
     /* 
       The click event of menu: 

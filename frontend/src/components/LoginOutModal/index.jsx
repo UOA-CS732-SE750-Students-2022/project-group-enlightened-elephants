@@ -2,14 +2,14 @@ import React, { useContext, useState } from 'react'
 import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined} from '@ant-design/icons'
 import axios from 'axios'
-import { AuthContext } from '../../comtext/authContext'
+import { AuthContext } from '../../context/authContext'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import JSEncrypt from 'jsencrypt/bin/jsencrypt';
 
 export function LoginModal(props) {
 
     const {loginModalVisible, setLoginModalVisible, logoutModalVisible, setLogoutModalVisible} = props
-    const {setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
+    const {isLogin, setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
@@ -94,6 +94,7 @@ export function LoginModal(props) {
         setUserId(null)
         setToken(null)
         setLogoutModalVisible(false)
+        console.log(isLogin);
     }
 
     return (

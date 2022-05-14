@@ -1,5 +1,6 @@
 import express from 'express';
 import { retrieveAllComment_, addComment_, retrievecomment_List,retrieveComment_ListByPostId } from '../../data/comment-data/commentDao';
+import {verifyToken} from '../../utils/token'
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get('/getById', async (req, res) => {
     res.json(comment_)
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', verifyToken, async (req, res) => {
     const body = req.body
     const comment_ = {
         comment: body.comment,
@@ -31,7 +32,7 @@ router.post('/add', async (req, res) => {
     res.sendStatus(HTTP_CREATED)
 })
 
-router.post('/reply', async (req, res) => {
+router.post('/reply', verifyToken, async (req, res) => {
     const body = req.body
     const comment_ = {
         comment: body.comment,

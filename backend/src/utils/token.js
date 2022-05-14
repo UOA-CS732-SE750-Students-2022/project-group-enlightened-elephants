@@ -10,6 +10,7 @@ const verifyToken = async (req, res, next) => {
             res.send({success : false, message : "no such user"})
         }
         else{
+            req.body.user_id = user._id
             next();
         }
     }catch(err){

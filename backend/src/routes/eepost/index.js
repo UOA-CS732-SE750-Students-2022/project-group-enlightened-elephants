@@ -1,6 +1,6 @@
 import express from 'express';
 import {retrieveAllEepostList,addEepost,retrieveEepostListByEntryId,deleteEepost,updateEepost,like} from '../../data/post-data/eepostDao';
-import {token} from '../../helper/token'
+import {verifyToken} from '../../utils/token'
 
 const router = express.Router();
 
@@ -23,8 +23,7 @@ router.get('/getByEntry', async (req, res) => {
 })
 
 // Add new post
-router.post('/add', token, async (req, res) => {
-    console.log(req.headers);
+router.post('/add', verifyToken, async (req, res) => {
     const body = req.body 
     const eepostDoc = { 
         entry_id: body.entry_id,
