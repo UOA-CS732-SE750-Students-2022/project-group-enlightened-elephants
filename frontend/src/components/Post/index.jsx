@@ -36,13 +36,15 @@ const DateWrapper = styled('div')(({}) => ({
 
 export default function Post(props) {
     const {
-        user_name = 'someone',
-        content = 'bala bala',
+        user_name = 'unknown',
+        content = '...',
+        updatedAt,
         comments = [
             {
-                user_name: 'commenter-name',
-                to_user_name: 'someone',
-                content: 'bala la',
+                user_name: 'unknown',
+                to_user_name: 'unknown',
+                content: '...',
+                updatedAt,
             },
         ],
     } = props;
@@ -145,7 +147,9 @@ export default function Post(props) {
                         >
                             Reply
                         </Button>
-                        <DateWrapper>{dayjs().format('HH:mm:ss DD/MM/YYYY')}</DateWrapper>
+                        <DateWrapper>
+                            {dayjs(updatedAt).format('HH:mm:ss DD/MM/YYYY')}
+                        </DateWrapper>
                     </CardActions>
                 </CardContent>
                 {comments.length > 0 && <CommentsWrapper>
@@ -187,7 +191,9 @@ export default function Post(props) {
                                 >
                                     Reply
                                 </Button>
-                                <DateWrapper>{dayjs().format('HH:mm:ss DD/MM/YYYY')}</DateWrapper>
+                                <DateWrapper>
+                                    {dayjs(item.updatedAt).format('HH:mm:ss DD/MM/YYYY')}
+                                </DateWrapper>
                             </CardActions>
                         </div>
                     ))}
