@@ -15,6 +15,18 @@ export default function Result() {
 
     const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
 
+    React.useEffect(() => {
+        if (currentId == null) {
+            const search = location.search.replace('?', '');
+            const searchList = search.split('&');
+            for (const item of searchList) {
+                const pairs = item.split('=');
+                if (pairs[0] === 'id') setCurrentId(pairs[1]);
+                if (pairs[0] === 'title') setCurrentTitle(pairs[1]);
+            }
+        }
+    }, []);
+
     return (
         <Wrapper>
             <div style={{ width: '50%' }}>
