@@ -46,10 +46,15 @@ As we use MERN stack to build the application, we build a frontend application w
 * React hooks. Execute code at various points within a component's lifecycle.
 * MUI, Ant Design. Two UI libraries based on React.
 * Jsencrypt. A good solution to RSA Javascript encryption.
+* Axios. A promise-based HTTP Client for node.js and the browser.
 
 ### Backend
 * Express Router. Navigate to rescources in the server.
-* jsonwebtoken. Generate and verify the decrypted token containing the user information.
+* Jsonwebtoken. Generate and verify the decrypted token containing the user information.
+* Mongoose. A MongoDB object modeling tool designed to work in an asynchronous environment.
+
+### Database
+* Mongodb. A non-relational document database that provides support for JSON-like storage.
 
 ## 📦Getting Started
 
@@ -65,8 +70,6 @@ As we use MERN stack to build the application, we build a frontend application w
 1. Clone this repo.
 
        git clone https://github.com/UOA-CS732-SE750-Students-2022/project-group-enlightened-elephants.git
-
-
 
 2. Go to the folder and install all dependencies.
 
