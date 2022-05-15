@@ -7,9 +7,6 @@ export default function SearchBar({ setResults, setLoading }) {
   const [input, setInput] = useState('');
   const [history, setHistory] = useLocalStorage('history', []);
 
-  // const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
-  //     input.trim()
-  // }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
   const param = input.replace(/\s+/g, "/");
   const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=
               ${param.toLowerCase().trim()}

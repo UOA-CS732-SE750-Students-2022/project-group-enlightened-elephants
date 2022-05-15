@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Modal, Tabs, Form, Input, Button, Checkbox, Spin } from 'antd'
+import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import { AuthContext } from '../../context/authContext'
@@ -13,7 +13,7 @@ export function LoginModal(props) {
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
-    const [token, setToken] = useLocalStorage('token', null)
+    const [setToken] = useLocalStorage('token', null)
 
     const [form] = Form.useForm()
 
@@ -29,7 +29,6 @@ export function LoginModal(props) {
     }
 
     /* The event of finishing the form. */
-    // TODO: 在这里写登录请求
     const login = async (value) => {
         // Get public key with pem
         const res = await axios.get('/user/key')
@@ -43,25 +42,20 @@ export function LoginModal(props) {
             username: value.username,
             password: ciphierText
         }
-        //console.log(userInfo.username);
-        const body = JSON.stringify(userInfo)
         // Login
-        const { status, data } = await axios.post("/user/login", userInfo)
+        const { data } = await axios.post("/user/login", userInfo)
         if (data.success === false) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         } else {
             setUserName(data.user.username)
-            // setUserId(data.user._id)
             setToken(data.token)
             setIsLogin(true)
             setSuccessModalVisible(true)
         }
     }
 
-    // 在这里写注册请求，逻辑同上
     const register = async (value) => {
-
         // Get public key with pem
         const pem = (await axios.get('/user/key')).data
         // Encrypt
