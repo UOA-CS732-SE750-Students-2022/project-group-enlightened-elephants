@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -139,11 +140,16 @@ export default function Home() {
                                 backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
                             }}
                         />
-                        <Box sx={{ flexGrow: 1 }}>
-                            {option.title}
-                            <br />
-                            <span style={{ fontSize: '14px' }}>{option.extract}</span>
-                        </Box>
+                        <Link
+                            underline="none"
+                            to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
+                        >
+                            <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
+                                {option.title}
+                                <br />
+                                <span style={{ fontSize: '14px' }}>{option.extract}</span>
+                            </Box>
+                        </Link>
                     </li>
                 )}
             />

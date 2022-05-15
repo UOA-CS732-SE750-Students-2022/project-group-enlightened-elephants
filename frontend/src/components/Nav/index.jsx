@@ -9,7 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router';
 
 import { LoginModal } from '../LoginOutModal'
 import { AuthContext } from '../../context/authContext'
