@@ -12,6 +12,70 @@ code {
     monospace;
 }
 
+/* Reset & custom vars */
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Google colours */
+  --blue-hover: #4362a8;
+  --blue: #6180ca;
+  --red: #dd4943;
+  --yellow: #ffbe43;
+  --green: #54a15e;
+
+  /* Neutrals */
+  --neutral-900: #000;
+  --neutral-700: #2c3a4b;
+  --neutral-600: #545d69;
+  --neutral-500: #6d7580;
+  --neutral-400: #a5abb3;
+  --neutral-300: #dadee3;
+  --neutral-200: #f4f6f9;
+  --neutral-100: #fff;
+}
+
 a {
   text-decoration: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: none;
+}
+
+li,
+ul {
+  list-style: none;
+}
+
+/* Util classes */
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-center {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.page-layout {
+  min-height: calc(100vh - 266px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
 }

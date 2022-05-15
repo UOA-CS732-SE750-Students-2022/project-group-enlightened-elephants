@@ -1,168 +1,50 @@
 import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import SearchIcon from '@mui/icons-material/Search';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-
-import useLocalStorage from '../hooks/useLocalStorage';
-import {AuthContext} from '../context/authContext'
+import SearchBar from '../components/SearchBar/SearchBar';
+import SearchResult from '../components/SearchResult/SearchResult';
 
 export default function Home() {
-    const [value, setValue] = React.useState('');
-    const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [list, setList] = React.useState([]);
-    const [history,setHistory] = useLocalStorage('history',[])
-    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
-    const navigate = useNavigate()
-
-    function toResultPage(pageid,title){
-        setCurrentId(pageid)
-        setCurrentTitle(title)
-        navigate('/result')
-    }
-
-    const handleChange = (event, value) => {
-        setValue(value);
-    };
-
-    const handleClick = (option) => {
-        console.log('prop', option);
-    }
-
-    const handlePressEnter = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            event.defaultMuiPrevented = true;
-            // handleSearch();
-        }
-    }
-
-    const handleSearch = () => {
-        if (!history && !(history instanceof Array)) {
-            setHistory([])
-        }
-
-        history.map((item,index) => {
-            if(item === value){
-                history.splice(index, 1);
-            }
-        })
-        if (history.length >= 10) {
-            history.splice(0, 1);
-        }
-        setHistory([...history,value])
-
-        setLoading(true);
-        const param = value.replace(/\s+/g,"/");
-        const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
-            param.toLowerCase().trim()
-        }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
-        fetch(url, { method: 'get' })
-            .then((res) => res.json())
-            .then((res) => {
-                const array = [];
-                for (const key of Object.keys(res.query.pages)) {
-                    array.push(res.query.pages[key]);
-                }
-                setList(array);
-                console.log(list, array.length);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setLoading(false);
-            });
-    };
-
-    const handleMouseDown = (event) => {
-        event.preventDefault();
-    };
+    const [results, setResults] = React.useState(undefined);
 
     return (
-        <div style={{ padding: '10em', textAlign: 'center' }}>
+        <div style={{ padding: '10em 0 0 0', textAlign: 'center' }}>
             <div style={{ marginBottom: '12px' }}>
-                <span className="App-title" style={{ color: 'black', marginRight: '8px' }}>Enlightened Elephants</span>
+                <span className="App-title" style={{ color: 'black', marginRight: '8px', fontSize: '30px' }}>
+                    Enlightened Elephants
+                </span>
                 <span style={{ lineHeight: '34px', fontSize: '22px' }}>Wikipedia Forum</span>
             </div>
-            <Autocomplete
-                freeSolo
-                loading={loading}
-                open={open}
-                onOpen={() => {
-                    setOpen(true);
-                }}
-                onClose={() => {}}
-                inputValue={value}
-                onKeyUp={handlePressEnter}
-                onInputChange={handleChange}
-                filterOptions={(x) => x}
-                disableClearable
-                // options={history.reverse().map((option) => option)}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Input and search..."
-                        InputProps={{
-                            ...params.InputProps,
-                            type: 'search',
-                            endAdornment: <div style={{ display: 'flex' }}>
-                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="search"
-                                        onClick={handleSearch}
-                                        onMouseDown={handleMouseDown}
-                                        edge="end"
-                                    >
-                                        <SearchIcon/>
-                                    </IconButton>
-                                </InputAdornment>
-                            </div>
-                        }}
-                    />
-                )}
-                noOptionsText="No results"
-                options={list}
-                getOptionLabel={(option) => `${option.pageid}`}
-                renderOption={(props, option) => (
-                    <li
-                        {...props}
-                        onClick={() => {
-                            handleClick(option);
-                        }}
-                    >
-                        <Box
-                            component="span"
-                            sx={{
-                                width: 50,
-                                height: 50,
-                                flexShrink: 0,
-                                borderRadius: '3px',
-                                mr: 1,
-                                mt: '2px',
-                            }}
-                            style={{
-                                backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
-                            }}
-                        />
-                        {/* <Link
-                            underline="none"
-                            to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
-                        > */}
-                            <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }} onClick={()=>toResultPage(option.pageid,option.title)}>
-                                {option.title}
-                                <br />
-                                <span style={{ fontSize: '14px' }}>{option.extract}</span>
-                            </Box>
-                        {/* </Link> */}
-                    </li>
-                )}
-            />
+
+            <main className="page-layout">
+                <div className="content-container">
+                    <SearchBar setResults={setResults} setLoading={setLoading} />
+
+                    {results && <p className="result-number">Displaying {results.length} results.</p>}
+
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <ul className="results">
+                            {results &&
+                            results.map((result, index) => {
+                                return (
+                                    <li key={index}>
+                                        <SearchResult result={result} />
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )}
+                </div>
+
+                <p className="footer">
+                    &lt;&lt; Powered by{" "}
+                    <a href="https://en.wikipedia.org/wiki/Main_Page" rel="noreferrer" target="_blank" className="wikipedia">
+                        wikipedia
+                    </a>{" "}
+                    &gt;&gt;
+                </p>
+            </main>
         </div>
     )
 }

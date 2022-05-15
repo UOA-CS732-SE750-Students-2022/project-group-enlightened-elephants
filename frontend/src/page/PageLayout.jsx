@@ -4,7 +4,7 @@ import Nav from '../components/Nav'
 
 export default function PageLayout() {
     return (
-        <div>
+        <div style={{ minWidth: '1000px' }}>
             <Nav />
             <Outlet />
         </div>

@@ -19,8 +19,14 @@ const RightButtonWrapper = styled('div')(({ theme }) => ({
 }));
 
 export default function Editor(props) {
+    const {
+        getPost,
+        entryId,
+        entryTitle,
+    } = props;
+
     const [token] = useLocalStorage('token');
-    const { isLogin, userName } = React.useContext(AuthContext);
+    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext);
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
@@ -43,12 +49,12 @@ export default function Editor(props) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            'entry_id':"32452432",
-            'entry_title':"hello",
+            'entry_id': currentId,
+            'entry_title': currentTitle,
             content: data.get('content'),
             'user_name': userName,
         }
-        addPost(body).then(props.getPost);
+        addPost(body).then(getPost);
     };
 
     return (
@@ -59,7 +65,7 @@ export default function Editor(props) {
                 <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            label="Content"
+                            label="Add a new post..."
                             name="content"
                             multiline
                             minRows={5}
@@ -67,19 +73,20 @@ export default function Editor(props) {
                             onChange={handleChange}
                             placeholder="Please type here.."
                             style={{ width: '100%' }}
+                            disabled={!isLogin}
                         />
                         <RightButtonWrapper>
                             <Button
                                 size="small"
                                 type="submit"
                                 variant="contained"
+                                disabled={!isLogin}
                             >
-                                Add a new post
+                                Post
                             </Button>
                         </RightButtonWrapper>
                     </Box>
                 </CardContent>
-
             </Card>
         </Wrapper>
     );
