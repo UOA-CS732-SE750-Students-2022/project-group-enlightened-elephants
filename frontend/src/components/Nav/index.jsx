@@ -55,9 +55,9 @@ export default function Nav() {
 
     const handleClick = (option) => {
         console.log('prop', option);
-        navigate(`/result?id=${option.pageid}&title=${option.title}`)
         setCurrentId(option.pageid)
         setCurrentTitle(option.title)
+        navigate(`/result?id=${option.pageid}&title=${option.title}`)
     }
 
     const handlePressEnter = (event) => {
