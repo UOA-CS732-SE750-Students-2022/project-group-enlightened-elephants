@@ -95,6 +95,19 @@ Go to the root directory.
 
 3. Enter `http://localhost:3000` in your browser.
 
+Or Execute in production environment
+
+1. Build the frontend.
+
+       cd frontend
+       npm run build
+       
+2. Excute the backend.
+
+       cd backend
+       npm run production
+
+3. Enter `http://localhost:8080` in your browser.
 
 ## 🖥Broswer supported
 
