@@ -5,7 +5,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -82,7 +81,7 @@ export default function Nav() {
         setLoading(true);
         const param = value.replace(/\s+/g,"");
         const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
-            param.toLowerCase().trim()
+            param.trim()
         }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
         fetch(url, { method: 'get' })
             .then((res) => res.json())
@@ -92,7 +91,6 @@ export default function Nav() {
                     array.push(res.query.pages[key]);
                 }
                 setList(array);
-                console.log(list, array.length);
                 setLoading(false);
             })
             .catch((err) => {

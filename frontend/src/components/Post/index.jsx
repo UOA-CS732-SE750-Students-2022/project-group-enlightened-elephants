@@ -8,11 +8,13 @@ import { styled } from '@mui/material/styles';
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import { Link } from '@mui/material';
 import dayjs from 'dayjs';
-import axios from "axios";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import {AuthContext} from "../../context/authContext";
+import axios from 'axios';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { AuthContext } from '../../context/authContext';
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -43,6 +45,7 @@ export default function Post(props) {
         _id,
         user_name = 'unknown',
         content = '...',
+        like,
         updatedAt,
         comments = [],
     } = props;
@@ -56,6 +59,7 @@ export default function Post(props) {
         setValue(event.target.value);
     };
 
+    const [showMore, setShowMore] = React.useState(false);
     const [fold, setFold] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isReplyOpen = Boolean(anchorEl);
@@ -74,10 +78,14 @@ export default function Post(props) {
         setValue('');
     };
 
-    const addComment = async (data) => {
+    const handleLike = () => {
+        axios.get(`/eepost/like/${_id}`).then(getPost);
+    }
+
+    const addComment = async (url, data) => {
         await axios({
             method: 'post',
-            url: '/comment/add', // '/comment/reply'
+            url: '/comment/add',
             headers: {
                 token: token,
             },
@@ -95,7 +103,8 @@ export default function Post(props) {
             'user_name': userName,
             ...param,
         }
-        addComment(body).then(getPost);
+        const url = param.replied_id ? '/comment/reply': '/comment/add';
+        addComment(url, body).then(getPost);
     };
 
     const replyId = isReplyOpen ? 'primary-search-account-reply' : undefined;
@@ -148,10 +157,27 @@ export default function Post(props) {
                 sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
             >
                 <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
-                    <Typography gutterBottom component="div">
-                        <Link>{user_name}</Link>
-                        <span style={{ fontSize: '14px' }}> says:</span>
-                    </Typography>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography gutterBottom component="div">
+                            <Link>{user_name}</Link>
+                            <span style={{ fontSize: '14px' }}> says:</span>
+                        </Typography>
+                        <div>
+                            <IconButton
+                                aria-label="search"
+                                onClick={handleLike}
+                                edge="end"
+                            >
+                                <ThumbUpOutlinedIcon fontSize="small"/>
+                            </IconButton>
+                            {like > 0 && <span
+                                style={{ lineHeight: '26px', display: 'inline-block', margin: '0 12px' }}
+                            >
+                                {like}
+                            </span>}
+                        </div>
+                    </div>
+
                     <Typography style={{ fontSize: '14px' }}>
                         {content}
                     </Typography>
@@ -192,7 +218,7 @@ export default function Post(props) {
                     }}
                 >
                     {comments.map((item, index) => (
-                        <div key={index}>
+                        <div key={index} style={{ display: !showMore && index > 2 ? 'none' : '' }}>
                             <CardContent sx={{ flexGrow: 1 }} style={{ paddingTop: '0', paddingBottom: '0' }}>
                                 <Typography gutterBottom component="div" style={{ fontSize: '14px' }}>
                                     <Link>{item.user_name}</Link>
@@ -226,6 +252,12 @@ export default function Post(props) {
                             </CardActions>
                         </div>
                     ))}
+                    {comments.length > 3 && !showMore && <CardContent
+                        sx={{ flexGrow: 1 }}
+                        style={{ paddingTop: '0', paddingBottom: '0' }}
+                    >
+                        <Button size="small" onClick={setShowMore(true)}>Load more</Button>
+                    </CardContent>}
                 </CommentsWrapper>
             </Card>
             {renderReply}

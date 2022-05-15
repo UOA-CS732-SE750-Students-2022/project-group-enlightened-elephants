@@ -46,6 +46,11 @@ export default function PostView(props) {
                 setCount(Math.ceil(data.count/10));
             }
         });
+        setPostList([{
+            _id: 'id',
+            like: 11,
+            comments: [{},{},{},{}],
+        }])
     }
 
     React.useEffect(() => {
