@@ -56,9 +56,16 @@ export default function PostView(props) {
         getPost().then();
     }, [currentId])
 
-    const handleChange = (event, value) => {
+    const handleChange = async (event, value) => {
         setPage(value);
-        getPost().then();
+        const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${value}`;
+        axios.get(url).then(res => {
+            const data = res.data;
+            setPostList(data.eeposts || []);
+            if (data.count > 0) {
+                setCount(Math.ceil(data.count/10));
+            }
+        });
     };
 
     return (
