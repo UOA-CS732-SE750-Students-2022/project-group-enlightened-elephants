@@ -83,14 +83,14 @@ As we use MERN stack to build the application, we build a frontend application w
 
 Go to the root directory.
 
-1. Executing the backend.
+1. Execute the backend.
 
        cd backend
        npm start
        
-2. Executing the frontend.
+2. Change another terminal and go to the root directory to excute the frontend.
 
-       cd ../frontend
+       cd frontend
        npm start
 
 3. Enter `http://localhost:3000` in your browser.
