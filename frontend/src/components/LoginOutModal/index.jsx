@@ -13,13 +13,13 @@ export function LoginModal(props) {
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
-    const [,setToken] = useLocalStorage('token', null)
+    const [, setToken] = useLocalStorage('token', null)
 
     const [form] = Form.useForm()
 
     const { TabPane } = Tabs;
 
-    /* 
+    /*
         The event of closing the Model
     */
     const handleCancel = () => {
@@ -105,7 +105,7 @@ export function LoginModal(props) {
                 {/* Tabs component of Antd. */}
                 <Tabs defaultActiveKey="login">
                     <TabPane tab="Login" key="login">
-                        {/* 
+                        {/*
                             THe Form component of Antd.
                         */}
                         <Form
