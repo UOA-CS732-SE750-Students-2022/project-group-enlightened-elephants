@@ -6,6 +6,9 @@ import Editor from '../components/Editor';
 import { styled } from '@mui/material/styles';
 import axios from "axios";
 
+import {AuthContext} from '../context/authContext'
+import useGet from '../hooks/useGet';
+
 const Wrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(2, 0),
   minHeight: '400px',
@@ -13,20 +16,31 @@ const Wrapper = styled('div')(({ theme }) => ({
 
 export default function PostView() {
     const [postList, setPostList] = React.useState([]);
+    const [pageNum, setPageNum] = React.useState(1)
+    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
     let total = 0;
 
-    const getPost = async () => {
-        const url = '/eepost/getByEntry?entry_id=Entry-id-b&pageNum=1';
-        axios.get(url).then(res => {
-            const data = res.data;
-            setPostList(data.eeposts || []);
-            if (data.count > 0) total = data.count;
-        });
+    const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${pageNum}`
+    const { status, data, isLoading } = useGet(url)
+    // console.log(data)
+
+    const getPost = () => {
+        setPostList(data.eeposts || []);
+        if (data.count > 0) total = data.count;
     }
 
-    React.useEffect(() => {
-        getPost().then();
-    }, []);
+    // const getPost = async () => {
+    //     const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=1`
+    //     axios.get(url).then(res => {
+    //         const data = res.data;
+    //         setPostList(data.eeposts || []);
+    //         if (data.count > 0) total = data.count;
+    //     });
+    // }
+
+    // React.useEffect(() => {
+    //     getPost().then();
+    // }, []);
 
     return (
         <Box style={{ width: '50%', marginBottom: '24px' }}>

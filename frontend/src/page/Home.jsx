@@ -7,7 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+
 import useLocalStorage from '../hooks/useLocalStorage';
+import {AuthContext} from '../context/authContext'
 
 export default function Home() {
     const [value, setValue] = React.useState('');
@@ -15,16 +17,13 @@ export default function Home() {
     const [loading, setLoading] = React.useState(false);
     const [list, setList] = React.useState([]);
     const [history,setHistory] = useLocalStorage('history',[])
+    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
     const navigate = useNavigate()
 
-    let pageid = ''
-    let title = ''
-    const toResultPage = ()=>{
-        navigate('/result',{
-            state:{pageid:pageid, title: title}
-        })
-        // Result页面获取：  const location = useLocation()
-        //                  const pageid = location.state.pageid
+    function toResultPage(pageid,title){
+        setCurrentId(pageid)
+        setCurrentTitle(title)
+        navigate('/result')
     }
 
     const handleChange = (event, value) => {
@@ -59,7 +58,7 @@ export default function Home() {
         setHistory([...history,value])
 
         setLoading(true);
-        const param = value.replace(/\s+/g,"");
+        const param = value.replace(/\s+/g,"/");
         const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
             param.toLowerCase().trim()
         }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
@@ -151,16 +150,16 @@ export default function Home() {
                                 backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
                             }}
                         />
-                        <Link
+                        {/* <Link
                             underline="none"
                             to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
-                        >
-                            <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
+                        > */}
+                            <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }} onClick={()=>toResultPage(option.pageid,option.title)}>
                                 {option.title}
                                 <br />
                                 <span style={{ fontSize: '14px' }}>{option.extract}</span>
                             </Box>
-                        </Link>
+                        {/* </Link> */}
                     </li>
                 )}
             />
