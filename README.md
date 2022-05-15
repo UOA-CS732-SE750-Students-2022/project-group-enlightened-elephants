@@ -46,36 +46,36 @@ As we use MERN stack to build the application, we build a frontend application w
 * Jsencrypt. A good solution to RSA Javascript encryption.
 
 ### Backend
-* Express Router. Navigate to rescources in the server
+* Express Router. Navigate to rescources in the server.
 * jsonwebtoken. Generate and verify the decrypted token containing the user information.
 
 ## 📦Getting Started
 
 ### Preconditions
 
-Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/), [React](https://reactjs.org/) , and [Node.js](https://nodejs.org/en/)
+Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/), [React](https://reactjs.org/) , and [Node.js](https://nodejs.org/en/).
 
 ### Installation
 
-1. Clone this repo
+1. Clone this repo.
 
        git clone https://github.com/henrispkl/MernBB.git
 
 
 
-2. Go to the folder and install all dependencies
+2. Go to the folder and install all dependencies.
 
-* Install dependencies for frontend
+* Install dependencies for frontend.
 
       cd frontend
       npm install
 
-* Install dependencies for backend
+* Install dependencies for backend.
 
       cd ../backend
       npm install
 
-3. Build the project
+3. Build the project.
 
        npm run build
 
@@ -85,7 +85,7 @@ Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/)
 
        npm start
 
-2. Enter `http://localhost:3000/home` in your browser
+2. Enter `http://localhost:3000/home` in your browser.
 
 
 ## 🖥Broswer supported
