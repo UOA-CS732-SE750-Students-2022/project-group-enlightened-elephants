@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,6 +15,17 @@ export default function Home() {
     const [loading, setLoading] = React.useState(false);
     const [list, setList] = React.useState([]);
     const [history,setHistory] = useLocalStorage('history',[])
+    const navigate = useNavigate()
+
+    let pageid = ''
+    let title = ''
+    const toResultPage = ()=>{
+        navigate('/result',{
+            state:{pageid:pageid, title: title}
+        })
+        // Result页面获取：  const location = useLocation()
+        //                  const pageid = location.state.pageid
+    }
 
     const handleChange = (event, value) => {
         setValue(value);
