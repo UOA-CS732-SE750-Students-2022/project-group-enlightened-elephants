@@ -13,20 +13,19 @@ const Wrapper = styled('div')(() => ({
 export default function Result() {
     const location = useLocation();
 
-    const [id, setId] = React.useState('');
-    const [title, setTitle] = React.useState('');
     const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
 
-    // React.useEffect(() => {
-    //     const search = location.search.replace('?', '');
-    //     const searchList = search.split('&');
-    //     for (const item of searchList) {
-    //         const pairs = item.split('=');
-    //         if (pairs[0] === 'id') setId(pairs[1]);
-    //         if (pairs[0] === 'title') setTitle(pairs[1]);
-    //     }
-    //     console.log(id, title, location);
-    // }, []);
+    React.useEffect(() => {
+        if (currentId == null) {
+            const search = location.search.replace('?', '');
+            const searchList = search.split('&');
+            for (const item of searchList) {
+                const pairs = item.split('=');
+                if (pairs[0] === 'id') setCurrentId(pairs[1]);
+                if (pairs[0] === 'title') setCurrentTitle(pairs[1]);
+            }
+        }
+    }, []);
 
     return (
         <Wrapper>

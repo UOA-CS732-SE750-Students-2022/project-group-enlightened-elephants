@@ -44,17 +44,8 @@ export default function PostView(props) {
     
     const [count, setCount] = React.useState(0);
 
+    React.useEffect(() => getPost(), [currentId])
 
-    React.useEffect(() => { 
-        const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${page}`;
-        axios.get(url).then(res => {
-            const data = res.data;
-            setPostList(data.eeposts || []);
-            if (data.count > 0) {
-                setCount(Math.ceil(data.count/10));
-            }
-        },[]);
-     })
     const getPost = () => {
         const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${page}`;
         axios.get(url).then(res => {

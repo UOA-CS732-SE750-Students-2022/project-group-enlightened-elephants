@@ -22,20 +22,6 @@ const eepostSchema = new Schema({
 })
 
 
-// const commentSchema = new Schema({
-// 	eepost_id : {
-//         type : Schema.Types.ObjectId, 
-//         required: true
-//     },
-// 	content : {
-//         type : String, 
-//         required: true,
-//         maxlength : 200,
-//     },
-// }, {
-//     timestamps : true
-// })
-
 const userSchema = new Schema({
     username: { type: String, unique: true},
     password: { type: String },
