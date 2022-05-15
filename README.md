@@ -8,13 +8,15 @@
 
 <div align="center">A forum board built with React, Express, Node and MongoDB</div>
 
-![](https://raw.githubusercontent.com/UOA-CS732-SE750-Students-2022/project-group-enlightened-elephants/main/Home.png?token=GHSAT0AAAAAABTNHWSLJKLLH2NAPGLAVZAIYUA24ZA)
+![](./Home.png)
 
 ## 🎨Description 
 
 This is an open forum for Wikipedia, which is a MERN-stack Web application that enables users to authenticate to post comments and discussions about Wikipedia contents, and to reply to these posts. We hope that the Wikipedia forum will help people gain more useful information and make users have a good experience.
 
 ## ✨Roadmap
+
+![wiki and posts](./content.png)
 
 ### 🌈Registry and login
 
