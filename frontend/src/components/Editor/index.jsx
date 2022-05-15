@@ -59,7 +59,7 @@ export default function Editor({ getPost }) {
                 <CardContent sx={{ flexGrow: 1 }} style={{ paddingBottom: '0' }}>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            label="Add a new post..."
+                            label={isLogin ? 'Add a new post...' : 'Login to join in the discussion!'}
                             name="content"
                             multiline
                             minRows={5}
