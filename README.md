@@ -51,9 +51,12 @@ As we use MERN stack to build the application, we build a frontend application w
 
 ## 📦Getting Started
 
-### Preconditions
+### Environment Supported
 
-Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/), [React](https://reactjs.org/) , and [Node.js](https://nodejs.org/en/).
+* Install latest [MongoDB](https://www.mongodb.com/3).
+* Install latest [Express](https://expressjs.com/).
+* Install latest [React](https://reactjs.org/).
+* Install latest  [Node.js](https://nodejs.org/en/).
 
 ### Installation
 
