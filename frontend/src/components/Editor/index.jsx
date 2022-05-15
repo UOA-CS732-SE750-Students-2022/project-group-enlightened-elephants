@@ -19,6 +19,12 @@ const RightButtonWrapper = styled('div')(({ theme }) => ({
 }));
 
 export default function Editor(props) {
+    const {
+        getPost,
+        entryId,
+        entryTitle,
+    } = props;
+
     const [token] = useLocalStorage('token');
     const { isLogin, userName } = React.useContext(AuthContext);
     const [value, setValue] = React.useState('');
@@ -43,12 +49,12 @@ export default function Editor(props) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            'entry_id':"32452432",
-            'entry_title':"hello",
+            'entry_id': entryId,
+            'entry_title': entryTitle,
             content: data.get('content'),
             'user_name': userName,
         }
-        addPost(body).then(props.getPost);
+        addPost(body).then(getPost);
     };
 
     return (
@@ -81,7 +87,6 @@ export default function Editor(props) {
                         </RightButtonWrapper>
                     </Box>
                 </CardContent>
-
             </Card>
         </Wrapper>
     );

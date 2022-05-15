@@ -1,6 +1,13 @@
 import * as React from 'react';
 import PostView from './PostView';
 import { useLocation } from 'react-router';
+import { styled } from '@mui/material/styles';
+
+const Wrapper = styled('div')(() => ({
+    display: 'flex',
+    minHeight: '666px',
+    height: 'calc(100vh - 70px)',
+}));
 
 export default function Result() {
     const location = useLocation();
@@ -19,14 +26,14 @@ export default function Result() {
     }, []);
 
     return (
-        <div style={{ display: 'flex' }}>
+        <Wrapper>
             <div style={{ width: '50%' }}>
                 <iframe
                     src={`https://en.wikipedia.org/wiki/${title}`}
-                    style={{ height: 'calc(100vh - 70px)', width: '100%' }}
+                    style={{ height: '100%', width: '100%' }}
                 />
             </div>
-            <PostView/>
-        </div>
+            <PostView entryId={id} entryTitle={title}/>
+        </Wrapper>
     )
 }

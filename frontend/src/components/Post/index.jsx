@@ -102,7 +102,7 @@ export default function Post(props) {
             'user_name': userName,
             ...param,
         }
-        addComment(body).then(props.getPost);
+        addComment(body).then(getPost);
     };
 
     const replyId = isReplyOpen ? 'primary-search-account-reply' : undefined;
