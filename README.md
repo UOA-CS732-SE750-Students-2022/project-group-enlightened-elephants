@@ -35,6 +35,7 @@ Post your opinions about related wikipedia articles and comment to others.
 ### 🛡Like posts
 Support the opinions you like or you think important.
 
+![](./Kobe_Bryant.png)
 
 ## ⚙️Technologies
 
