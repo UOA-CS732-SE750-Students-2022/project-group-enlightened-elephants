@@ -33,7 +33,7 @@ const CommentsWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-const DateWrapper = styled('div')(({}) => ({
+const DateWrapper = styled('div')(() => ({
     fontSize: '14px',
     lineHeight: '22px',
     padding: '4px',

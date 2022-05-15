@@ -37,7 +37,7 @@ const Search = styled(Autocomplete)(({ theme }) => ({
 export default function Nav() {
     const [loginModalVisible, setLoginModalVisible] = React.useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false)
-    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext)
+    const { isLogin, userName, setCurrentId, setCurrentTitle } = React.useContext(AuthContext)
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -72,11 +72,11 @@ export default function Nav() {
             setHistory([])
         }
 
-        history.map((item,index) => {
-            if(item === value){
+        history.forEach((item,index) => {
+            if (item === value) {
                 history.splice(index, 1);
             }
-        })
+        });
         if (history.length >= 10) {
             history.splice(0, 1);
         }

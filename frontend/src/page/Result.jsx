@@ -13,7 +13,7 @@ const Wrapper = styled('div')(() => ({
 export default function Result() {
     const location = useLocation();
 
-    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
+    const { currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext)
 
     React.useEffect(() => {
         if (currentId == null) {

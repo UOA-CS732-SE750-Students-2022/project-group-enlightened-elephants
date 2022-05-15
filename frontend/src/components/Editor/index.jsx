@@ -18,15 +18,9 @@ const RightButtonWrapper = styled('div')(({ theme }) => ({
     textAlign: 'right',
 }));
 
-export default function Editor(props) {
-    const {
-        getPost,
-        entryId,
-        entryTitle,
-    } = props;
-
+export default function Editor({ getPost }) {
     const [token] = useLocalStorage('token');
-    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext);
+    const { isLogin, userName, currentId, currentTitle } = React.useContext(AuthContext);
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {

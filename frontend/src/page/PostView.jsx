@@ -7,8 +7,7 @@ import Editor from '../components/Editor';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 
-import {AuthContext} from '../context/authContext'
-import useGet from '../hooks/useGet'
+import { AuthContext } from '../context/authContext';
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(2, 0),
@@ -31,7 +30,6 @@ const EmptyWrapper = styled('div')(({ theme }) => ({
 }));
 
 export default function PostView(props) {
-
     const {
         entryId,
         entryTitle,
@@ -39,14 +37,11 @@ export default function PostView(props) {
 
     const [page, setPage] = React.useState(1);
     const [postList, setPostList] = React.useState([]);
-    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
-    let total = 0;
-    
+    const { currentId } = React.useContext(AuthContext);
+
     const [count, setCount] = React.useState(0);
 
-    React.useEffect(() => getPost(), [currentId])
-
-    const getPost = () => {
+    const getPost = async () => {
         const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${page}`;
         axios.get(url).then(res => {
             const data = res.data;
@@ -55,12 +50,11 @@ export default function PostView(props) {
                 setCount(Math.ceil(data.count/10));
             }
         });
-        setPostList([{
-            _id: 'id',
-            like: 11,
-            comments: [{},{},{},{}],
-        }])
     }
+
+    React.useEffect(() => {
+        getPost().then();
+    }, [currentId])
 
     const handleChange = (event, value) => {
         setPage(value);
