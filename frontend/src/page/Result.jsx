@@ -31,6 +31,7 @@ export default function Result() {
                 <iframe
                     src={`https://en.wikipedia.org/wiki/${title}`}
                     style={{ height: '100%', width: '100%' }}
+                    title={title}
                 />
             </div>
             <PostView entryId={id} entryTitle={title}/>

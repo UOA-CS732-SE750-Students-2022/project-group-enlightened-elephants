@@ -8,13 +8,12 @@
   margin: 1.5rem auto;
   border-radius: 1.8rem;
   width: 600px;
-  -webkit-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
-  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
-.searchbar,
-.search {
+.searchbar {
   padding: 15px 0;
 }
 
@@ -39,8 +38,8 @@
 }
 
 .search svg {
-  color: var(--blue);
-  font-size: 1.6rem;
+  position: relative;
+  top: 4px;
 }
 
 .search svg:hover {
@@ -55,9 +54,5 @@
   .searchbar {
     font-size: 1rem;
     min-width: 0;
-  }
-
-  .search svg {
-    font-size: 1.2rem;
   }
 }

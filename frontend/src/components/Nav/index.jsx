@@ -7,14 +7,20 @@ import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useLocation } from 'react-router';
 
+import useLocalStorage from '../../hooks/useLocalStorage';
 import { LoginModal } from '../LoginOutModal'
 import { AuthContext } from '../../context/authContext'
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled(Autocomplete)(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -23,34 +29,9 @@ const Search = styled('div')(({ theme }) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
     [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: 'auto',
-    },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
     },
 }));
 
@@ -61,6 +42,69 @@ export default function Nav() {
 
     const location = useLocation()
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [value, setValue] = React.useState('');
+    const [open, setOpen] = React.useState(false);
+    const [list, setList] = React.useState([]);
+    const [history,setHistory] = useLocalStorage('history',[])
+
+    const handleChange = (event, value) => {
+        setValue(value);
+    };
+
+    const handleClick = (option) => {
+        console.log('prop', option);
+    }
+
+    const handlePressEnter = (event) => {
+        event.preventDefault();
+        event.defaultMuiPrevented = true;
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    }
+
+    const handleSearch = () => {
+        if (!history && !(history instanceof Array)) {
+            setHistory([])
+        }
+
+        history.map((item,index) => {
+            if(item === value){
+                history.splice(index, 1);
+            }
+        })
+        if (history.length >= 10) {
+            history.splice(0, 1);
+        }
+        setHistory([...history,value])
+
+        setLoading(true);
+        const param = value.replace(/\s+/g,"");
+        const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
+            param.toLowerCase().trim()
+        }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
+        fetch(url, { method: 'get' })
+            .then((res) => res.json())
+            .then((res) => {
+                const array = [];
+                for (const key of Object.keys(res.query.pages)) {
+                    array.push(res.query.pages[key]);
+                }
+                setList(array);
+                console.log(list, array.length);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error(err);
+                setLoading(false);
+            });
+    };
+
+    const handleMouseDown = (event) => {
+        event.preventDefault();
+    };
+
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -88,15 +132,85 @@ export default function Nav() {
                         </Button>
                     </Link>
 
-                    {location.pathname === '/result' && <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon/>
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{'aria-label': 'search'}}
-                        />
-                    </Search>}
+                    {location.pathname === '/result' && <Search
+                        freeSolo
+                        loading={loading}
+                        open={open}
+                        onOpen={() => {
+                            setOpen(true);
+                        }}
+                        onClose={() => {
+                            setOpen(false);
+                        }}
+                        style={{ width: '469px' }}
+                        size="small"
+                        inputValue={value}
+                        onKeyUp={handlePressEnter}
+                        onInputChange={handleChange}
+                        filterOptions={(x) => x}
+                        disableClearable
+                        // options={history.reverse().map((option) => option)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Search..."
+                                InputProps={{
+                                    ...params.InputProps,
+                                    type: 'search',
+                                    endAdornment: <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        {loading ? <CircularProgress color="inherit" size={12} /> : null}
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="search"
+                                                onClick={handleSearch}
+                                                onMouseDown={handleMouseDown}
+                                                edge="end"
+                                            >
+                                                <SearchIcon/>
+                                            </IconButton>
+                                        </InputAdornment>
+                                    </div>
+                                }}
+                            />
+                        )}
+                        noOptionsText="No results"
+                        options={list}
+                        getOptionLabel={(option) => `${option.pageid}`}
+                        renderOption={(props, option) => (
+                            <li
+                                {...props}
+                                onClick={() => {
+                                    handleClick(option);
+                                }}
+                            >
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        width: 50,
+                                        height: 50,
+                                        flexShrink: 0,
+                                        borderRadius: '3px',
+                                        mr: 1,
+                                        mt: '2px',
+                                    }}
+                                    style={{
+                                        backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
+                                    }}
+                                />
+                                <Link
+                                    underline="none"
+                                    to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
+                                >
+                                    <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
+                                        {option.title}
+                                        <br />
+                                        <span style={{ fontSize: '14px' }}>{option.extract}</span>
+                                    </Box>
+                                </Link>
+                            </li>
+                        )}
+                    />}
+
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         {!isLogin && (<Button
