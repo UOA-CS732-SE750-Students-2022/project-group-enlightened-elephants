@@ -57,9 +57,9 @@ export default function Nav() {
     }
 
     const handlePressEnter = (event) => {
-        event.preventDefault();
-        event.defaultMuiPrevented = true;
         if (event.key === 'Enter') {
+            event.preventDefault();
+            event.defaultMuiPrevented = true;
             handleSearch();
         }
     }
@@ -145,7 +145,7 @@ export default function Nav() {
                         style={{ width: '469px' }}
                         size="small"
                         inputValue={value}
-                        onKeyUp={handlePressEnter}
+                        onKeyDown={handlePressEnter}
                         onInputChange={handleChange}
                         filterOptions={(x) => x}
                         disableClearable
