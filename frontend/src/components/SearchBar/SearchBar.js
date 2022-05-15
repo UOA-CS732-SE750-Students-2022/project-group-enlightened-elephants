@@ -5,11 +5,15 @@ import SearchIcon from "@mui/icons-material/Search";
 
 export default function SearchBar({ setResults, setLoading }) {
   const [input, setInput] = useState('');
-  const [history, setHistory] = useLocalStorage('history',[]);
+  const [history, setHistory] = useLocalStorage('history', []);
 
-  const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
-      input.trim()
-  }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
+  // const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
+  //     input.trim()
+  // }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
+  const param = input.replace(/\s+/g, "/");
+  const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=
+              ${param.toLowerCase().trim()}
+              &gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
 
   function search(e) {
     e.preventDefault();
@@ -21,11 +25,11 @@ export default function SearchBar({ setResults, setLoading }) {
 
     const value = input.trim();
     if (!history || !(history instanceof Array)) setHistory([]);
-    history.map((item,index) => {
-      if(item === value) history.splice(index, 1);
+    history.map((item, index) => {
+      if (item === value) history.splice(index, 1);
     })
     if (history.length >= 10) history.splice(0, 1);
-    setHistory([...history,value])
+    setHistory([...history, value])
 
     setLoading(true);
 
@@ -55,13 +59,13 @@ export default function SearchBar({ setResults, setLoading }) {
   return (
     <form className="searchbar-container">
       <input
-          type="text"
-          className="searchbar"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+        type="text"
+        className="searchbar"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
       <button className="search" onClick={(e) => search(e)} type="submit">
-          <SearchIcon color="primary" fontSize="large" />
+        <SearchIcon color="primary" fontSize="large" />
       </button>
     </form>
   );

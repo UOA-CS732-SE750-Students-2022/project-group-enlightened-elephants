@@ -26,7 +26,7 @@ export default function Editor(props) {
     } = props;
 
     const [token] = useLocalStorage('token');
-    const { isLogin, userName } = React.useContext(AuthContext);
+    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext);
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
@@ -49,8 +49,8 @@ export default function Editor(props) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            'entry_id': entryId,
-            'entry_title': entryTitle,
+            'entry_id': currentId,
+            'entry_title': currentTitle,
             content: data.get('content'),
             'user_name': userName,
         }

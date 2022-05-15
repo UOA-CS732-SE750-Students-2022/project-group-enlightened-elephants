@@ -32,9 +32,14 @@ router.post('/add', verifyToken, async (req, res) => {
         user_id: body.user_id, 
         user_name: body.user_name
     }
-    const newEepost = await addEepost(eepostDoc)
+    try {
+        const newEepost = await addEepost(eepostDoc)
+        res.json({success:true})
+    } catch (error) {
+        res.json({success:false, message : error.message})
+    }
 
-    res.sendStatus(HTTP_CREATED)
+    
 })
 
 //  Delete post
