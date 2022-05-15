@@ -13,7 +13,7 @@ export function LoginModal(props) {
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
-    const [setToken] = useLocalStorage('token', null)
+    const [, setToken] = useLocalStorage('token', null)
 
     const [form] = Form.useForm()
 
