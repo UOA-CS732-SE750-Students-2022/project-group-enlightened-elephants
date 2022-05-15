@@ -10,13 +10,13 @@
 
 ![](./Home.png)
 
+![](./Kobe_Bryant.png)
+
 ## 🎨Description 
 
 This is an open forum for Wikipedia, which is a MERN-stack Web application that enables users to authenticate to post comments and discussions about Wikipedia contents, and to reply to these posts. We hope that the Wikipedia forum will help people gain more useful information and make users have a good experience.
 
 ## ✨Roadmap
-
-![wiki and posts](./content.png)
 
 ### 🌈Registry and login
 
@@ -34,8 +34,6 @@ Post your opinions about related wikipedia articles and comment to others.
 
 ### 🛡Like posts
 Support the opinions you like or you think important.
-
-![](./Kobe_Bryant.png)
 
 ## ⚙️Technologies
 
