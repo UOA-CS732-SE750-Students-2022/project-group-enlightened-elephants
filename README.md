@@ -44,7 +44,7 @@ As we use MERN stack to build the application, we build a frontend application w
 
 * React Router. Navigate to different areas of the application via the URL path without actually making additional server requests.
 * React hooks. Execute code at various points within a component's lifecycle.
-* Ant Design. A UI library based on React.
+* MUI, Ant Design. Two UI libraries based on React.
 * Jsencrypt. A good solution to RSA Javascript encryption.
 
 ### Backend
@@ -64,7 +64,7 @@ As we use MERN stack to build the application, we build a frontend application w
 
 1. Clone this repo.
 
-       git clone https://github.com/henrispkl/MernBB.git
+       git clone https://github.com/UOA-CS732-SE750-Students-2022/project-group-enlightened-elephants.git
 
 
 
@@ -77,7 +77,7 @@ As we use MERN stack to build the application, we build a frontend application w
 
 * Install dependencies for backend.
 
-      cd ../backend
+      cd backend
       npm install
 
 3. Build the project.
@@ -90,7 +90,7 @@ As we use MERN stack to build the application, we build a frontend application w
 
        npm start
 
-2. Enter `http://localhost:3000/home` in your browser.
+2. Enter `http://localhost:3000` in your browser.
 
 
 ## 🖥Broswer supported
