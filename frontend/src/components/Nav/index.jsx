@@ -5,7 +5,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -38,7 +37,7 @@ const Search = styled(Autocomplete)(({ theme }) => ({
 export default function Nav() {
     const [loginModalVisible, setLoginModalVisible] = React.useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false)
-    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext)
+    const { isLogin, userName, setCurrentId, setCurrentTitle } = React.useContext(AuthContext)
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -54,7 +53,7 @@ export default function Nav() {
     };
 
     const handleClick = (option) => {
-        console.log('prop', option);
+        setOpen(false);
         setCurrentId(option.pageid)
         setCurrentTitle(option.title)
         navigate(`/result?id=${option.pageid}&title=${option.title}`)
@@ -73,11 +72,11 @@ export default function Nav() {
             setHistory([])
         }
 
-        history.map((item,index) => {
-            if(item === value){
+        history.forEach((item,index) => {
+            if (item === value) {
                 history.splice(index, 1);
             }
-        })
+        });
         if (history.length >= 10) {
             history.splice(0, 1);
         }
@@ -86,7 +85,7 @@ export default function Nav() {
         setLoading(true);
         const param = value.replace(/\s+/g,"/");
         const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${
-            param.toLowerCase().trim()
+            param.trim()
         }&gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
         fetch(url, { method: 'get' })
             .then((res) => res.json())
@@ -96,7 +95,6 @@ export default function Nav() {
                     array.push(res.query.pages[key]);
                 }
                 setList(array);
-                console.log(list, array.length);
                 setLoading(false);
             })
             .catch((err) => {
@@ -201,16 +199,11 @@ export default function Nav() {
                                         backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
                                     }}
                                 />
-                                {/* <Link
-                                    underline="none"
-                                    to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
-                                > */}
-                                    <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
-                                        {option.title}
-                                        <br />
-                                        <span style={{ fontSize: '14px' }}>{option.extract}</span>
-                                    </Box>
-                                {/* </Link> */}
+                                <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
+                                    {option.title}
+                                    <br />
+                                    <span style={{ fontSize: '14px' }}>{option.extract}</span>
+                                </Box>
                             </li>
                         )}
                     />}

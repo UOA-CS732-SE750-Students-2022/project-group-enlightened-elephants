@@ -11,7 +11,7 @@ import { AuthContext } from './context/authContext'
 
 
 export default function App() {
-  const { isLogin, setIsLogin, userName, setUserName, setUserId } = useContext(AuthContext)
+  const { isLogin, setIsLogin, setUserName } = useContext(AuthContext)
   const [token, setToken] = useLocalStorage('token')
 
   // Auto Login

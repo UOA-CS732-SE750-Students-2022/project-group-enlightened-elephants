@@ -7,8 +7,7 @@ import Editor from '../components/Editor';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 
-import {AuthContext} from '../context/authContext'
-import useGet from '../hooks/useGet'
+import { AuthContext } from '../context/authContext';
 
 const Wrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(2, 0),
@@ -31,7 +30,6 @@ const EmptyWrapper = styled('div')(({ theme }) => ({
 }));
 
 export default function PostView(props) {
-
     const {
         entryId,
         entryTitle,
@@ -39,15 +37,30 @@ export default function PostView(props) {
 
     const [page, setPage] = React.useState(1);
     const [postList, setPostList] = React.useState([]);
-    const {currentId, setCurrentId, currentTitle, setCurrentTitle} = React.useContext(AuthContext)
-    let total = 0;
-    
+    const { currentId } = React.useContext(AuthContext);
+
     const [count, setCount] = React.useState(0);
 
-    React.useEffect(() => getPost(), [currentId])
+    const getPost = async () => {
+        const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=1`;
+        axios.get(url).then(res => {
+            const data = res.data;
+            setPostList(data.eeposts || []);
+            setPage(1)
+            if (data.count > 0) {
+                setCount(Math.ceil(data.count/10));
+            }
+        });
+    }
 
-    const getPost = () => {
-        const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${page}`;
+    React.useEffect(() => {
+        setCount(0)
+        getPost().then();
+    }, [currentId])
+
+    const handleChange = async (event, value) => {
+        setPage(value);
+        const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${value}`;
         axios.get(url).then(res => {
             const data = res.data;
             setPostList(data.eeposts || []);
@@ -55,11 +68,6 @@ export default function PostView(props) {
                 setCount(Math.ceil(data.count/10));
             }
         });
-    }
-
-    const handleChange = (event, value) => {
-        setPage(value);
-        getPost().then();
     };
 
     return (

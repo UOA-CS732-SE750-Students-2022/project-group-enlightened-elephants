@@ -9,7 +9,7 @@ export default function SearchBar({ setResults, setLoading }) {
 
   const param = input.replace(/\s+/g, "/");
   const wiki_api = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=
-              ${param.toLowerCase().trim()}
+              ${param.trim()}
               &gsrlimit=20&prop=pageimages|extracts&exchars=200&exintro&explaintext&exlimit=max&format=json&origin=*`;
 
   function search(e) {
@@ -22,7 +22,7 @@ export default function SearchBar({ setResults, setLoading }) {
 
     const value = input.trim();
     if (!history || !(history instanceof Array)) setHistory([]);
-    history.map((item, index) => {
+    history.forEach((item, index) => {
       if (item === value) history.splice(index, 1);
     })
     if (history.length >= 10) history.splice(0, 1);
