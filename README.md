@@ -8,13 +8,15 @@
 
 <div align="center">A forum board built with React, Express, Node and MongoDB</div>
 
-![](https://raw.githubusercontent.com/UOA-CS732-SE750-Students-2022/project-group-enlightened-elephants/main/Home.png?token=GHSAT0AAAAAABTNHWSLJKLLH2NAPGLAVZAIYUA24ZA)
+![](./Home.png)
 
 ## 🎨Description 
 
 This is an open forum for Wikipedia, which is a MERN-stack Web application that enables users to authenticate to post comments and discussions about Wikipedia contents, and to reply to these posts. We hope that the Wikipedia forum will help people gain more useful information and make users have a good experience.
 
 ## ✨Roadmap
+
+![wiki and posts](./content.png)
 
 ### 🌈Registry and login
 
@@ -51,9 +53,12 @@ As we use MERN stack to build the application, we build a frontend application w
 
 ## 📦Getting Started
 
-### Preconditions
+### Environment Supported
 
-Install [MongoDB](https://www.mongodb.com/3) , [Express](https://expressjs.com/), [React](https://reactjs.org/) , and [Node.js](https://nodejs.org/en/).
+* Install latest [MongoDB](https://www.mongodb.com/3).
+* Install latest [Express](https://expressjs.com/).
+* Install latest [React](https://reactjs.org/).
+* Install latest  [Node.js](https://nodejs.org/en/).
 
 ### Installation
 
