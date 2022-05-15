@@ -8,7 +8,6 @@ import Result from './page/Result';
 import Home from './page/Home'
 import useLocalStorage from './hooks/useLocalStorage';
 import { AuthContext } from './context/authContext'
-import { PageContext } from './context/pageContext'
 
 
 export default function App() {

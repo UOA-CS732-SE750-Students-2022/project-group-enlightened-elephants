@@ -22,7 +22,7 @@ export default function PostView() {
 
     const url = `/eepost/getByEntry?entry_id=${currentId}&pageNum=${pageNum}`
     const { status, data, isLoading } = useGet(url)
-    // console.log(data)
+    console.log(data)
 
     const getPost = () => {
         if (data.count > 0) total = data.count;
