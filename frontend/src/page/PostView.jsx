@@ -38,7 +38,7 @@ export default function PostView(props) {
     const [count, setCount] = React.useState(0);
 
     const getPost = async () => {
-        const url = `/eepost/getByEntry?entry_id=Entry-id-b&pageNum=${page}`;
+        const url = `/eepost/getByEntry?entry_id=${entryId}&pageNum=${page}`;
         axios.get(url).then(res => {
             const data = res.data;
             setPostList(data.eeposts || []);
@@ -58,7 +58,7 @@ export default function PostView(props) {
     };
 
     return (
-        <Box style={{ width: '50%', marginBottom: '24px' }}>
+        <Box style={{ width: '50%', margin: '12px 0' }}>
             <Wrapper>
                 <Stack spacing={2}>
                     {postList.map((item, index) => (

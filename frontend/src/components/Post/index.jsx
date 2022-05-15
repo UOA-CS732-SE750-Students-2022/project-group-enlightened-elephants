@@ -44,14 +44,7 @@ export default function Post(props) {
         user_name = 'unknown',
         content = '...',
         updatedAt,
-        comments = [
-            {
-                user_name: 'unknown',
-                to_user_name: 'unknown',
-                content: '...',
-                updatedAt,
-            },
-        ],
+        comments = [],
     } = props;
 
     const [token] = useLocalStorage('token');
@@ -207,7 +200,7 @@ export default function Post(props) {
                                     <Link>{item.to_user_name}</Link>:
                                 </Typography>
                                 <Typography style={{ fontSize: '14px' }}>
-                                    {item.content}
+                                    {item.comment}
                                 </Typography>
                             </CardContent>
                             <CardActions style={{ flexDirection: 'row-reverse', alignItems: 'baseline' }}>
