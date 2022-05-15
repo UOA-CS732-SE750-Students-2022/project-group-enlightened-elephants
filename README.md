@@ -14,38 +14,34 @@ This is an open forum for Wikipedia, which is a MERN-stack Web application that 
 
 ***
 
-#### Registry and login
+#### 🌈Registry and login
 
 Each new users need to register their own accounts. This is the basic function for some other functions.
 
 ***
 
-#### The precise search of Wikipedia articles
+#### 📦The precise search of Wikipedia articles
 Search a wikipedia articles to view its content and discussion of other users, or join the discussion by yourself!
 
 ***
 
-#### Corresponding View of a wikipedia article and post
+#### 💕Corresponding View of a wikipedia article and post
 A view with a wikipedia article and related discussion co-displaying to offer a good experience of exploring the konwledge behind the wikipedia article with other users.
 
 ***
 
-#### Post and reply
+#### 🎨Post and reply
 Express your opinions about related wikipedia articles and comment to others.
 
 ***
 
-#### Like posts
+#### 🛡Like posts
 Support the opinion you like or you think important.
 
-***
-
-#### Delete a posts
-Delete the post or comment that might be wrong.
 
 ***
 
-### Technologies
+### ⚙️Technologies
 
 As we use MERN stack to build the application, we build a frontend application with React and an express application with Express. Store data in a MongDB. Modify and add customized functions to the applications with Nodejs. Except React and Express, we can download other node moduals to enable more functions in both frontend and backend.
 
