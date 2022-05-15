@@ -7,7 +7,8 @@
 <h1 align="center">Enlightened Elephants Wiki Forum</h1>
 
 <div align="center">A forum board built with React, Express, Node and MongoDB</div>
-![](./Home.png)
+
+![](https://raw.githubusercontent.com/UOA-CS732-SE750-Students-2022/project-group-enlightened-elephants/main/Home.png?token=GHSAT0AAAAAABTNHWSLJKLLH2NAPGLAVZAIYUA24ZA)
 
 ## 🎨Description 
 
@@ -17,13 +18,13 @@ This is an open forum for Wikipedia, which is a MERN-stack Web application that 
 
 ### 🌈Registry and login
 
-Each new users need to register their own accounts. This is the basic function for some other functions.
+The users need to register and login their own accounts. This is the basic function for some other functions.
 
 
 ### 📦The precise search of Wikipedia articles
 Search wikipedia articles to view the content and discussion from other users, or join the discussion yourself!
 
-### 💕Corresponding View of a wikipedia article and post
+### 💕Corresponding view of a wikipedia article and post
 A view with a wikipedia article and related discussion co-displaying to offer a good experience of exploring the konwledge behind the wikipedia article with other users.
 
 ### 🎨Post and reply
@@ -35,7 +36,7 @@ Support the opinions you like or you think important.
 
 ## ⚙️Technologies
 
-As we use MERN stack to build the application, we build a frontend application with React and an express application with Express. Store data in a MongDB. Modify and add customized functions to the applications with Nodejs. Except React and Express, we can download other node moduals to enable more functions in both frontend and backend.
+As we use MERN stack to build the application, we build a frontend application with React and an express application with Express. Store data in a MongDB. Modify and add customized functions to the applications with Nodejs. Except React and Express, we have been using other node moduals to enable more functions in both frontend and backend.
 
 ### Frontend
 
