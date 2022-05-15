@@ -133,7 +133,7 @@ export default function Post(props) {
                             value={value}
                             onChange={handleChange}
                             placeholder="Please type here.."
-                            style={{ width: '45vh' }}
+                            style={{ width: '100vh', maxWidth: '600px' }}
                         />
                     </ReplyWrapper>
                     <ReplyWrapper style={{ paddingTop: '0', textAlign: 'right' }}>
@@ -170,7 +170,7 @@ export default function Post(props) {
                                 <ThumbUpOutlinedIcon fontSize="small"/>
                             </IconButton>
                             {like > 0 && <span
-                                style={{ lineHeight: '26px', display: 'inline-block', margin: '0 12px' }}
+                                style={{ lineHeight: '26px', display: 'inline-block', marginLeft: '12px' }}
                             >
                                 {like}
                             </span>}

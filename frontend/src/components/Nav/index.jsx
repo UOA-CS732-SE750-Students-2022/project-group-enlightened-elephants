@@ -53,7 +53,7 @@ export default function Nav() {
     };
 
     const handleClick = (option) => {
-        console.log('prop', option);
+        setOpen(false);
         setCurrentId(option.pageid)
         setCurrentTitle(option.title)
         navigate(`/result?id=${option.pageid}&title=${option.title}`)
@@ -199,16 +199,11 @@ export default function Nav() {
                                         backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
                                     }}
                                 />
-                                {/* <Link
-                                    underline="none"
-                                    to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
-                                > */}
-                                    <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
-                                        {option.title}
-                                        <br />
-                                        <span style={{ fontSize: '14px' }}>{option.extract}</span>
-                                    </Box>
-                                {/* </Link> */}
+                                <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
+                                    {option.title}
+                                    <br />
+                                    <span style={{ fontSize: '14px' }}>{option.extract}</span>
+                                </Box>
                             </li>
                         )}
                     />}
