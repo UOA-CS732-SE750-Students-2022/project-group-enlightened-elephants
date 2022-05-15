@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { Modal, Tabs, Form, Input, Button, Checkbox } from 'antd'
-import { UserOutlined, LockOutlined} from '@ant-design/icons'
+import { Modal, Tabs, Form, Input, Button, Checkbox, Spin } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import { AuthContext } from '../../context/authContext'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -8,8 +8,8 @@ import JSEncrypt from 'jsencrypt/bin/jsencrypt';
 
 export function LoginModal(props) {
 
-    const {loginModalVisible, setLoginModalVisible, logoutModalVisible, setLogoutModalVisible} = props
-    const {isLogin, setIsLogin, userName, setUserName, setUserId} = useContext(AuthContext)
+    const { loginModalVisible, setLoginModalVisible, logoutModalVisible, setLogoutModalVisible } = props
+    const { isLogin, setIsLogin, userName, setUserName, setUserId } = useContext(AuthContext)
     const [successModalVisible, setSuccessModalVisible] = useState(false)
     const [errMsg, setErrMsg] = useState(null)
     const [errModalVisible, setErrModalVisible] = useState(false)
@@ -32,7 +32,7 @@ export function LoginModal(props) {
     // TODO: 在这里写登录请求
     const login = async (value) => {
         // Get public key with pem
-        const res  = await axios.get('/user/key')
+        const res = await axios.get('/user/key')
         const pem = res.data
         // Encrypt
         const encryptor = new JSEncrypt()
@@ -40,17 +40,17 @@ export function LoginModal(props) {
         const ciphierText = encryptor.encrypt(value.password)
         // Defien username and password
         const userInfo = {
-            username : value.username,
-            password : ciphierText
+            username: value.username,
+            password: ciphierText
         }
         //console.log(userInfo.username);
         const body = JSON.stringify(userInfo)
         // Login
-        const {status, data} = await axios.post("/user/login", userInfo)
+        const { status, data } = await axios.post("/user/login", userInfo)
         if (data.success === false) {
             setErrMsg(data.message)
             setErrModalVisible(true)
-        }else{
+        } else {
             setUserName(data.user.username)
             // setUserId(data.user._id)
             setToken(data.token)
@@ -63,23 +63,23 @@ export function LoginModal(props) {
     const register = async (value) => {
 
         // Get public key with pem
-        const pem  = (await axios.get('/user/key')).data
+        const pem = (await axios.get('/user/key')).data
         // Encrypt
         const encryptor = new JSEncrypt()
         encryptor.setPublicKey(pem)
         const ciphierText = encryptor.encrypt(value.password)
         // Defien username and password
         const body = {
-            username : value.username,
-            password : ciphierText
+            username: value.username,
+            password: ciphierText
         }
         // Register
-        const {status, data} = await axios.post("/user/register", body)
+        const { status, data } = await axios.post("/user/register", body)
         if (data.success === false) {
             setErrMsg(data.message)
             setErrModalVisible(true)
         }
-        if (status === 200){
+        if (status === 200) {
             setUserName(data.user.username)
             // setUserId(data.user._id)
             setToken(data.token)
@@ -231,9 +231,9 @@ export function LoginModal(props) {
             <Modal
                 title="Error"
                 visible={errModalVisible}
-                onCancel={()=>setErrModalVisible(false)}
+                onCancel={() => setErrModalVisible(false)}
                 footer={[
-                    <Button key="cancel" onClick={()=>setErrModalVisible(false)}>
+                    <Button key="cancel" onClick={() => setErrModalVisible(false)}>
                         Re-login
                     </Button>]
                 }>
@@ -250,9 +250,9 @@ export function LoginModal(props) {
                     <Button key="cancel" onClick={() => setLogoutModalVisible(false)}>
                         Cancel
                     </Button>
-                    ]
+                ]
                 }>
-                Confirm Quit!
+                Do you confirm to quit?
             </Modal>
         </ >
     )
