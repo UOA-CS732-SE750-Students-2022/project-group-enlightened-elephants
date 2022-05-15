@@ -7,6 +7,14 @@
   pointer-events: none;
 }
 
+.App-title {
+  text-align: center;
+  font-family:  'Rochester', cursive;
+  font-size: 26px;
+  color: #fff;
+  text-transform: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
