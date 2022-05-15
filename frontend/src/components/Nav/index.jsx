@@ -14,7 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { LoginModal } from '../LoginOutModal'
@@ -38,9 +38,10 @@ const Search = styled(Autocomplete)(({ theme }) => ({
 export default function Nav() {
     const [loginModalVisible, setLoginModalVisible] = React.useState(false)
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false)
-    const { isLogin, userName } = React.useContext(AuthContext)
+    const { isLogin, userName, currentId, setCurrentId, currentTitle, setCurrentTitle } = React.useContext(AuthContext)
 
     const location = useLocation()
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [value, setValue] = React.useState('');
@@ -54,6 +55,9 @@ export default function Nav() {
 
     const handleClick = (option) => {
         console.log('prop', option);
+        setCurrentId(option.pageid)
+        setCurrentTitle(option.title)
+        navigate(`/result?id=${currentId}&title=${currentTitle}`)
     }
 
     const handlePressEnter = (event) => {
@@ -197,16 +201,16 @@ export default function Nav() {
                                         backgroundImage: option.thumbnail?.source ? `url('${option.thumbnail.source}')` : ''
                                     }}
                                 />
-                                <Link
+                                {/* <Link
                                     underline="none"
                                     to={{ pathname: '/result', search: `id=${option.pageid}&title=${option.title}` }}
-                                >
+                                > */}
                                     <Box sx={{ flexGrow: 1 }} style={{ color: '#000' }}>
                                         {option.title}
                                         <br />
                                         <span style={{ fontSize: '14px' }}>{option.extract}</span>
                                     </Box>
-                                </Link>
+                                {/* </Link> */}
                             </li>
                         )}
                     />}
