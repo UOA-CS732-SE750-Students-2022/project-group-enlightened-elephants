@@ -25,8 +25,8 @@ export default function PostView() {
     // console.log(data)
 
     const getPost = () => {
-        setPostList(data.eeposts || []);
         if (data.count > 0) total = data.count;
+        setPostList(data.eeposts || []);
     }
 
     // const getPost = async () => {
