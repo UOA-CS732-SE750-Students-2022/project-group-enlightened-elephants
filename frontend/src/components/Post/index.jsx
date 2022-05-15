@@ -59,8 +59,7 @@ export default function Post(props) {
         setValue(event.target.value);
     };
 
-    const [showMore, setShowMore] = React.useState(false);
-    const [fold, setFold] = React.useState(false);
+    const [fold, setFold] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isReplyOpen = Boolean(anchorEl);
 
@@ -201,7 +200,7 @@ export default function Post(props) {
                 </CardContent>
                 {comments.length > 0 && <CommentsWrapper style={{ marginBottom: fold ? '' : 0 }}>
                     <div style={{ lineHeight: '22px', padding: '4px' }}>
-                        <b>Comments:</b>
+                        <b>Comments ({comments.length}):</b>
                     </div>
                     <Button
                         size="small"
@@ -218,7 +217,7 @@ export default function Post(props) {
                     }}
                 >
                     {comments.map((item, index) => (
-                        <div key={index} style={{ display: !showMore && index > 2 ? 'none' : '' }}>
+                        <div key={index}>
                             <CardContent sx={{ flexGrow: 1 }} style={{ paddingTop: '0', paddingBottom: '0' }}>
                                 <Typography gutterBottom component="div" style={{ fontSize: '14px' }}>
                                     <Link>{item.user_name}</Link>
@@ -252,12 +251,6 @@ export default function Post(props) {
                             </CardActions>
                         </div>
                     ))}
-                    {comments.length > 3 && !showMore && <CardContent
-                        sx={{ flexGrow: 1 }}
-                        style={{ paddingTop: '0', paddingBottom: '0' }}
-                    >
-                        <Button size="small" onClick={setShowMore(true)}>Load more</Button>
-                    </CardContent>}
                 </CommentsWrapper>
             </Card>
             {renderReply}
