@@ -48,7 +48,11 @@ As we use MERN stack to build the application, we build a frontend application w
 
 ### Backend
 * Express Router. Navigate to rescources in the server.
-* jsonwebtoken. Generate and verify the decrypted token containing the user information.
+* Jsonwebtoken. Generate and verify the decrypted token containing the user information.
+* Mongoose.  A MongoDB object modeling tool designed to work in an asynchronous environment. 
+
+### Database
+* Mongodb. A document-oriented database which stores data in JSON-like documents with dynamic schema.
 
 ## 📦Getting Started
 
